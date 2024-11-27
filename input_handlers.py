@@ -192,6 +192,31 @@ class InventoryEventHandler(AskUserEventHandler):
 
     TITLE = "<missing title>"
 
+    def __init__(self, engine: Engine):
+        super().__init__(engine)
+        self.grouped_items = self.group_inventory_items()
+
+    def group_inventory_items(self) -> list[tuple[str, Item, int]]:
+        """
+        Group inventory items by name, preserving their order and count.
+
+        Returns:
+            A list of tuples (item_name, item, count), where:
+            - item_name: The display name of the item.
+            - item: A reference to one of the grouped items.
+            - count: The number of items in the group.
+        """
+        inventory = self.engine.player.inventory
+        grouped_items = {}
+        for item in inventory.items:
+            if item.name in grouped_items:
+                grouped_items[item.name]["count"] += 1
+            else:
+                grouped_items[item.name] = {"item": item, "count": 1}
+
+        # Convert to a sorted list for display
+        return [(name, data["item"], data["count"]) for name, data in grouped_items.items()]
+
     def on_render(self, console: tcod.Console) -> None:
         """
         Render an inventory menu, which displays the items in the inventory and their count.
@@ -199,23 +224,14 @@ class InventoryEventHandler(AskUserEventHandler):
         """
         super().on_render(console)
 
-        # Group items and calculate counts
-        inventory = self.engine.player.inventory
-        grouped_items = {}
-        for item in inventory.items:
-            if item.name in grouped_items:
-                grouped_items[item.name]["count"] += 1
-                grouped_items[item.name]["weight"] += item.weight
-            else:
-                grouped_items[item.name] = {"count": 1, "weight": item.weight}
-
         # Calculate display height
-        height = len(grouped_items) + 3  # 2 for header, 1 for at least one item line
+        height = len(self.grouped_items) + 3  # 2 for header, 1 for at least one item line
         if height <= 3:
             height = 3
 
         # Calculate inventory load
-        total_weight = sum(item["weight"] for item in grouped_items.values())
+        inventory = self.engine.player.inventory
+        total_weight = sum(item.weight for item in inventory.items)
         max_weight = inventory.max_weight
 
         # Position based on player location
@@ -248,13 +264,13 @@ class InventoryEventHandler(AskUserEventHandler):
         )
 
         # Display items
-        if grouped_items:
-            for i, (item_name, data) in enumerate(grouped_items.items(), start=1):
+        if self.grouped_items:
+            for i, (item_name, _, count) in enumerate(self.grouped_items, start=1):
                 item_key = chr(ord("1") + i - 1)
                 console.print(
                     x + 1,
                     y + i + 1,
-                    f"({item_key}) {item_name} x{data['count']} w:{data['weight']}",
+                    f"({item_key}) {item_name} x{count}",
                 )
         else:
             console.print(x + 1, y + 2, "(Vazio)")
@@ -264,19 +280,18 @@ class InventoryEventHandler(AskUserEventHandler):
         key = event.sym
         index = key - tcod.event.K_1
 
-        if 0 <= index <= 26:
-            try:
-                grouped_items = list(set(player.inventory.items))
-                selected_item = grouped_items[index]
-            except IndexError:
-                self.engine.message_log.add_message("Input Invalido.", color.invalid)
-                return None
+        if 0 <= index < len(self.grouped_items):
+            # Seleciona o item agrupado correto
+            _, selected_item, _ = self.grouped_items[index]
             return self.on_item_selected(selected_item)
-        return super().ev_keydown(event)
+        else:
+            self.engine.message_log.add_message("Input inválido.", color.invalid)
+            return None
 
     def on_item_selected(self, item: Item) -> Optional[ActionOrHandler]:
         """Called when the user selects a valid item."""
         raise NotImplementedError()
+
 
 
 class InventoryActivateHandler(InventoryEventHandler):

@@ -9,6 +9,7 @@ import random
 monsters = []
 items = []
 key_items = []
+chests = []
 
 #---------------------------------PLAYER
 player = Actor(
@@ -95,6 +96,7 @@ molotov = Item(
     consumable=consumable.FireballDamageConsumable(damage=12, radius=3),
     weight=1.65
 )
+#---------------------------------KEY ITEMS
 chave = Item(
     char=";",
     color=(100, 100, 100),
@@ -103,14 +105,15 @@ chave = Item(
     weight=0.01,
     key_id=0
 )
-
-
+#---------------------------------CHESTS
 chest = Chest(
-    char="$",
+    char="C",
+    color=(150, 150, 50),
+    name="Caixa",
+    locked=False,
     chest_id=0,
-    breakable=False,
-    items=None,
-    locked=True,
+    breakable=True,
+    items=[molotov, cachaca, cachaca, cachaca, cachaca, lancador_de_crack],
 )
 
 
@@ -126,3 +129,5 @@ items.append(lancador_de_crack)
 items.append(molotov)
 
 key_items.append(chave)
+
+chests.append(chest)

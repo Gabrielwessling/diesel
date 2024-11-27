@@ -23,7 +23,6 @@ class Engine:
     game_world: GameWorld
 
     def __init__(self, player: Actor):
-        self.message_log = MessageLog()
         self.mouse_location = (0, 0)
         self.player = player
 

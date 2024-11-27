@@ -171,7 +171,7 @@ class Chest(Entity):
         y: int = 0,
         char: str = "C",  # Representação do baú no mapa.
         color: Tuple[int, int, int] = (139, 69, 19),  # Marrom, cor típica de baús.
-        name: str = "Chest",
+        name: str = "Caixa",
         locked: bool = False,  # Indica se o baú está trancado.
         breakable: bool = False,  # Indica se o baú pode ser quebrado.
         chest_id: Optional[int] = None,  # ID necessário para baús trancados.
@@ -225,6 +225,8 @@ class Chest(Entity):
         items = self.items
         self.items = []  # Esvazia o baú.
         self.blocks_movement = False  # O baú agora não bloqueia movimento.
+        self.x = 200
+        self.y = 200
         return items
 
     def _player_has_key(self, actor: Actor) -> bool:

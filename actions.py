@@ -4,6 +4,7 @@ from typing import Optional, Tuple, TYPE_CHECKING
 
 import color
 import exceptions
+from entity import Chest
 
 if TYPE_CHECKING:
     from engine import Engine
@@ -166,9 +167,15 @@ class MovementAction(ActionWithDirection):
         if not self.engine.game_map.tiles["walkable"][dest_x, dest_y]:
             # Destination is blocked by a tile.
             raise exceptions.Impossible("Esse caminho esta bloqueado por uma tile.")
-        if self.engine.game_map.get_blocking_entity_at_location(dest_x, dest_y):
-            if self.engine.game_map.get_blocking_entity_at_location(dest_x, dest_y) == Chest:
-                print("FOUND CHEST")
+        blocking_entity = self.engine.game_map.get_blocking_entity_at_location(dest_x, dest_y)
+        if blocking_entity:
+            if isinstance(blocking_entity, Chest):
+                # Aqui você pode acessar métodos ou atributos da classe Chest
+                for item in blocking_entity.break_chest(self.engine.player):
+                    item.spawn(self.engine.game_map, dest_x, dest_y)
+                    self.engine.message_log.add_message("Bau quebrado!")
+                    self.engine.player.skill_list.skills[3].add_xp(450)
+                return  # Finaliza a ação após interagir com o baú
             raise exceptions.Impossible("Esse caminho esta bloqueado por uma Entity.")
 
         self.entity.move(self.dx, self.dy)

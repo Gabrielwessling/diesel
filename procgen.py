@@ -8,6 +8,7 @@ import tcod
 import entity_factories
 from game_map import GameMap
 import tile_types
+from entity import Chest
 
 
 if TYPE_CHECKING:
@@ -104,6 +105,7 @@ def generate_dungeon(
     rooms: List[RectangularRoom] = []
 
     center_of_last_room = (0, 0)
+    level_chest = entity_factories.chests[0].spawn(dungeon, center_of_last_room[0] + 2, center_of_last_room[1] + 2)
 
     for r in range(max_rooms):
         room_width = random.randint(room_min_size, room_max_size)
@@ -145,7 +147,8 @@ def generate_dungeon(
         if len(rooms) != 0:
             place_entities(new_room, dungeon, max_monsters_per_room, max_items_per_room, max_chests_per_room)
 
-        entity_factories.key_items[0].spawn(dungeon, center_of_last_room[0], center_of_last_room[1])
+        level_chest.x = center_of_last_room[0]
+        level_chest.y = center_of_last_room[1]
 
         # Finally, append the new room to the list.
         rooms.append(new_room)
