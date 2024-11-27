@@ -1,0 +1,237 @@
+from __future__ import annotations # Primeiro
+
+import copy # imports aleatorios
+import math
+
+from typing import Optional, Tuple, Type, TypeVar, TYPE_CHECKING, Union, List
+
+from render_order import RenderOrder # imports de dentro
+import exceptions
+
+if TYPE_CHECKING:
+    from components.ai import BaseAI
+    from components.consumable import Consumable
+    from components.fighter import Fighter
+    from components.inventory import Inventory
+    from game_map import GameMap
+    from components.skill_list import SkillList
+
+T = TypeVar("T", bound="Entity")
+
+
+class Entity:
+    """
+    A generic object to represent players, enemies, items, etc.
+    """
+
+    parent: Union[GameMap, Inventory]
+
+    def __init__(
+        self,
+        parent: Optional[GameMap] = None,
+        x: int = 0,
+        y: int = 0,
+        char: str = "?",
+        color: Tuple[int, int, int] = (255, 255, 255),
+        name: str = "<Unnamed>",
+        blocks_movement: bool = False,
+        render_order: RenderOrder = RenderOrder.CORPSE,
+    ):
+        self.x = x
+        self.y = y
+        self.char = char
+        self.color = color
+        self.name = name
+        self.blocks_movement = blocks_movement
+        self.render_order = render_order
+        if parent:
+            # If parent isn't provided now then it will be set later.
+            self.parent = parent
+            parent.entities.add(self)
+
+    @property
+    def gamemap(self) -> GameMap:
+        return self.parent.gamemap
+
+    def spawn(self: T, gamemap: GameMap, x: int, y: int) -> T:
+        """Spawn a copy of this instance at the given location."""
+        clone = copy.deepcopy(self)
+        clone.x = x
+        clone.y = y
+        clone.parent = gamemap
+        gamemap.entities.add(clone)
+        return clone
+
+    def place(self, x: int, y: int, gamemap: Optional[GameMap] = None) -> None:
+        """Place this entity at a new location.  Handles moving across GameMaps."""
+        self.x = x
+        self.y = y
+        if gamemap:
+            if hasattr(self, "parent"):  # Possibly uninitialized.
+                if self.parent is self.gamemap:
+                    self.gamemap.entities.remove(self)
+            self.parent = gamemap
+            gamemap.entities.add(self)
+
+    def distance(self, x: int, y: int) -> float:
+        """
+        Return the distance between the current entity and the given (x, y) coordinate.
+        """
+        return math.sqrt((x - self.x) ** 2 + (y - self.y) ** 2)
+
+    def move(self, dx: int, dy: int) -> None:
+        # Move the entity by a given amount
+        self.x += dx
+        self.y += dy
+
+class Actor(Entity):
+    def __init__(
+        self,
+        *,
+        x: int = 0,
+        y: int = 0,
+        char: str = "?",
+        color: Tuple[int, int, int] = (255, 255, 255),
+        name: str = "",
+        ai_cls: Type[BaseAI],
+        fighter: Fighter,
+        inventory: Inventory,
+        skill_list: SkillList,
+    ):
+        # Inicializa a classe pai Entity, mas sem atribuir o gamemap
+        super().__init__(
+            x=x,
+            y=y,
+            char=char,
+            color=color,
+            name=name,
+            blocks_movement=True,
+            render_order=RenderOrder.ACTOR,
+        )
+
+        # Inicializa o AI e Fighter
+        self.ai: Optional[BaseAI] = ai_cls(self)
+        self.fighter = fighter
+        self.fighter.parent = self
+
+        self.inventory = inventory
+        self.inventory.parent = self
+
+        self.skill_list = skill_list
+        self.skill_list.parent = self
+
+        
+
+    @property
+    def is_alive(self) -> bool:
+        """Retorna True enquanto esse ator pode realizar ações."""
+        return bool(self.ai)
+    @property
+    def hasnt_won(self) -> bool:
+        monsters = []
+        for entity in set(self.parent.gamemap.actors) - {self.ai.engine.player}:
+            monsters.append(entity)
+        if len(monsters) == 0:
+            return False
+        return True
+    
+class Item(Entity):
+    def __init__(
+        self,
+        *,
+        x: int = 0,
+        y: int = 0,
+        char: str = "?",
+        color: Tuple[int, int, int] = (255, 255, 255),
+        name: str = "<Unnamed>",
+        consumable: Consumable,
+        weight: float = 0,
+        key_id: Optional[int] = None
+    ):
+        super().__init__(
+            x=x,
+            y=y,
+            char=char,
+            color=color,
+            name=name,
+            blocks_movement=False,
+            render_order=RenderOrder.ITEM,
+        )
+
+        self.consumable = consumable
+        self.consumable.parent = self
+        self.weight = weight
+        self.key_id = key_id
+
+class Chest(Entity):
+    def __init__(
+        self,
+        *,
+        x: int = 0,
+        y: int = 0,
+        char: str = "C",  # Representação do baú no mapa.
+        color: Tuple[int, int, int] = (139, 69, 19),  # Marrom, cor típica de baús.
+        name: str = "Chest",
+        locked: bool = False,  # Indica se o baú está trancado.
+        breakable: bool = False,  # Indica se o baú pode ser quebrado.
+        chest_id: Optional[int] = None,  # ID necessário para baús trancados.
+        items: Optional[List[Item]] = None,  # Lista de itens armazenados no baú.
+    ):
+        # Inicializa a classe pai Entity, mas sem atribuir o gamemap
+        super().__init__(
+            x=x,
+            y=y,
+            char=char,
+            color=color,
+            name=name,
+            blocks_movement=True,
+            render_order=RenderOrder.ACTOR,
+        )
+        self.locked = locked
+        self.breakable = breakable
+        self.chest_id = chest_id
+        self.items = items or []
+
+    def open(self, actor: Actor) -> List[Item]:
+        """
+        Tenta abrir o baú.
+        
+        Args:
+            actor (Actor): O ator tentando abrir o baú.
+            
+        Returns:
+            List[Item]: A lista de itens no baú se for aberto.
+        """
+        if self.locked:
+            if not self._player_has_key(actor):
+                raise exceptions.Impossible("O baú está trancado e você não tem a chave.")
+        
+        self.locked = False  # Destranca o baú ao abri-lo.
+        return self.items
+
+    def break_chest(self, actor: Actor) -> List[Item]:
+        """
+        Quebra o baú para acessar os itens, se for quebrável.
+        
+        Args:
+            actor (Actor): O ator quebrando o baú.
+            
+        Returns:
+            List[Item]: Os itens no baú.
+        """
+        if not self.breakable:
+            raise exceptions.Impossible("Este baú não pode ser quebrado.")
+        
+        items = self.items
+        self.items = []  # Esvazia o baú.
+        self.blocks_movement = False  # O baú agora não bloqueia movimento.
+        return items
+
+    def _player_has_key(self, actor: Actor) -> bool:
+        """Verifica se o jogador possui a chave correspondente ao baú."""
+        if not self.chest_id:
+            return False
+        for item in actor.inventory.items:
+            if hasattr(item, "key_id") and item.key_id == self.chest_id:
+                return True
+        return False
