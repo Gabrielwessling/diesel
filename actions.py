@@ -146,6 +146,10 @@ class MeleeAction(ActionWithDirection):
             attack_color = color.enemy_atk
 
         if damage > 0:
+            if self.entity is self.engine.player:
+                self.engine.player.skill_list.skills[2].add_xp(15)
+            if target is self.engine.player:
+                self.engine.player.skill_list.skills[4].add_xp(15)
             self.engine.message_log.add_message(
                 f"{attack_desc} causando {damage} de dano.", attack_color
             )
@@ -170,12 +174,17 @@ class MovementAction(ActionWithDirection):
         blocking_entity = self.engine.game_map.get_blocking_entity_at_location(dest_x, dest_y)
         if blocking_entity:
             if isinstance(blocking_entity, Chest):
-                # Aqui você pode acessar métodos ou atributos da classe Chest
-                for item in blocking_entity.break_chest(self.engine.player):
-                    item.spawn(self.engine.game_map, dest_x, dest_y)
+                if blocking_entity.breakable:
+                    # Aqui você pode acessar métodos ou atributos da classe Chest
+                    for item in blocking_entity.break_chest(self.engine.player):
+                        item.spawn(self.engine.game_map, dest_x, dest_y)
                     self.engine.message_log.add_message("Bau quebrado!")
-                    self.engine.player.skill_list.skills[3].add_xp(450)
-                return  # Finaliza a ação após interagir com o baú
+                    return  # Finaliza a ação após interagir com o baú
+                else:
+                    for item in blocking_entity.open(self.engine.player):
+                        item.spawn(self.engine.game_map, dest_x, dest_y)
+                    self.engine.message_log.add_message("Bau aberto!")
+                    return  # Finaliza a ação após interagir com o baú
             raise exceptions.Impossible("Esse caminho esta bloqueado por uma Entity.")
 
         self.entity.move(self.dx, self.dy)

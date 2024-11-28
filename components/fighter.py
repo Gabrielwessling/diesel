@@ -41,7 +41,8 @@ class Fighter(BaseComponent):
         amount_recovered = new_hp_value - self.hp
 
         self.hp = new_hp_value
-
+        if amount_recovered >= 1:
+            self.engine.player.skill_list.skills[3].add_xp(15)
         return amount_recovered
 
     def take_damage(self, amount: int) -> None:

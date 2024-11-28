@@ -204,10 +204,19 @@ class Chest(Entity):
         """
         if self.locked:
             if not self._player_has_key(actor):
-                raise exceptions.Impossible("O baú está trancado e você não tem a chave.")
+                raise exceptions.Impossible(f"O(a) {self.name} precisa de chave.")
         
-        self.locked = False  # Destranca o baú ao abri-lo.
-        return self.items
+        items = self.items
+        self.items = []  # Esvazia o baú.
+        self.blocks_movement = False  # O baú agora não bloqueia movimento.
+        self.char = "%"
+        self.name = "Bau aberto"
+        self.color = (100, 100, 40)
+        self.blocks_movement = False
+        self.breakable = False
+        self.locked = False
+        self.render_order = RenderOrder.CORPSE
+        return items
 
     def break_chest(self, actor: Actor) -> List[Item]:
         """
@@ -220,13 +229,18 @@ class Chest(Entity):
             List[Item]: Os itens no baú.
         """
         if not self.breakable:
-            raise exceptions.Impossible("Este baú não pode ser quebrado.")
+            raise exceptions.Impossible("Este container nao pode ser quebrado.")
         
         items = self.items
         self.items = []  # Esvazia o baú.
         self.blocks_movement = False  # O baú agora não bloqueia movimento.
-        self.x = 200
-        self.y = 200
+        self.char = "%"
+        self.name = "Bau quebrado"
+        self.color = (100, 100, 40)
+        self.blocks_movement = False
+        self.breakable = False
+        self.locked = False
+        self.render_order = RenderOrder.CORPSE
         return items
 
     def _player_has_key(self, actor: Actor) -> bool:

@@ -113,7 +113,7 @@ chest = Chest(
     locked=False,
     chest_id=0,
     breakable=True,
-    items=[molotov, cachaca, cachaca, cachaca, cachaca, lancador_de_crack],
+    items=[],
 )
 
 

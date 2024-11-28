@@ -69,6 +69,7 @@ class ConfusionConsumable(Consumable):
             f"Os olhos de {target.name} estão distantes, e ele comeca a trupicar!",
             color.status_effect_applied,
         )
+        self.engine.player.skill_list.skills[1].add_xp(45)
         target.ai = components.ai.ConfusedEnemy(
             entity=target, previous_ai=target.ai, turns_remaining=self.number_of_turns,
         )
@@ -83,6 +84,7 @@ class HealingConsumable(Consumable):
         amount_recovered = consumer.fighter.heal(self.amount)
 
         if amount_recovered > 0:
+            self.engine.player.skill_list.skills[1].add_xp(45)
             self.engine.message_log.add_message(
                 f"Voce consome {self.parent.name} e recupera {amount_recovered} HP!",
                 color.health_recovered,
@@ -100,6 +102,7 @@ class FireballDamageConsumable(Consumable):
         self.engine.message_log.add_message(
             "Selecione um local alvo.", color.needs_target
         )
+        self.engine.player.skill_list.skills[1].add_xp(45)
         return CircleAreaRangedAttackHandler(
             self.engine,
             radius=self.radius,
@@ -144,6 +147,7 @@ class LightningDamageConsumable(Consumable):
                     closest_distance = distance
 
         if target:
+            self.engine.player.skill_list.skills[1].add_xp(45)
             self.engine.message_log.add_message(
                 f"Uma corrente de eletricidade atinge {target.name} com um som de mil morcegos, dando {self.damage} de dano!"
             )

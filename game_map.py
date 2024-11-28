@@ -94,6 +94,18 @@ class GameMap:
 
         return None
     
+    def get_locations_of_tile(self, tile_type) -> list[tuple[int, int]]:
+        """
+        Retorna uma lista de todas as localizações no mapa que possuem a tile especificada.
+        
+        :param tile_type: O tipo de tile a ser buscado (por exemplo, tile_types.floor_grass).
+        :return: Uma lista de tuplas (x, y) com as coordenadas das tiles encontradas.
+        """
+        # Encontra todas as localizações no array de tiles que correspondem ao tipo especificado.
+        locations = np.argwhere(self.tiles == tile_type)
+        # Converte para uma lista de tuplas.
+        return [tuple(loc) for loc in locations]
+    
 class GameWorld:
     """
     Holds the settings for the GameMap, and generates new maps when moving down the stairs.
