@@ -59,16 +59,16 @@ class PickupAction(Action):
 
                 inventory.items.append(item)
 
-                self.engine.message_log.add_message(f"Você pega {item.name}!")
+                self.engine.message_log.add_message(f"Voce pega {item.name}!")
                 return
 
         raise exceptions.Impossible("Nada para pegar aqui.")
     
 class ItemAction(Action):
-    def __init__(
-        self, entity: Actor, item: Item, target_xy: Optional[Tuple[int, int]] = None
-    ):
+    def __init__(self, entity: Actor, item: Item, target_xy: Optional[Tuple[int, int]] = None):
         super().__init__(entity)
+        if item is None:
+            raise ValueError("Item nao pode ser None")
         self.item = item
         if not target_xy:
             target_xy = entity.x, entity.y
@@ -81,10 +81,13 @@ class ItemAction(Action):
 
     def perform(self) -> None:
         """Invoke the items ability, this action will be given to provide context."""
-        self.item.consumable.activate(self)
+        if self.item.consumable:
+            self.item.consumable.activate(self)
 
 class DropItem(ItemAction):
     def perform(self) -> None:
+        if self.entity.equipment.item_is_equipped(self.item):
+            self.entity.equipment.toggle_equip(self.item)
         self.entity.inventory.drop(self.item)
 
 class WaitAction(Action):
@@ -160,6 +163,14 @@ class MeleeAction(ActionWithDirection):
                 f"{attack_desc} mas não dá dano.", attack_color
             )
 
+class EquipAction(Action):
+    def __init__(self, entity: Actor, item: Item):
+        super().__init__(entity)
+
+        self.item = item
+
+    def perform(self) -> None:
+        self.entity.equipment.toggle_equip(self.item)
 
 class MovementAction(ActionWithDirection):
     def perform(self) -> None:

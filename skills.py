@@ -1,5 +1,6 @@
 # skills.py
 from skill import Skill
+from entity import *
 
 # Definindo as habilidades no script separado
 SKILLS = [

@@ -209,9 +209,14 @@ class InventoryEventHandler(AskUserEventHandler):
         inventory = self.engine.player.inventory
         grouped_items = {}
         for item in inventory.items:
-            if item.name in grouped_items:
+            item.name.replace("[E]", "")
+            if item.name in grouped_items and not self.engine.player.equipment.item_is_equipped(item):
                 grouped_items[item.name]["count"] += 1
-            else:
+            elif not self.engine.player.equipment.item_is_equipped(item):
+                item.name.removeprefix("[E]")
+                grouped_items[item.name] = {"item": item, "count": 1}
+            elif self.engine.player.equipment.item_is_equipped(item):
+                item.name = "[E]" + item.name
                 grouped_items[item.name] = {"item": item, "count": 1}
 
         # Convert to a sorted list for display
@@ -255,7 +260,7 @@ class InventoryEventHandler(AskUserEventHandler):
             fg=(255, 255, 255),
             bg=(0, 0, 0),
         )
-
+        
         # Print inventory load
         console.print(
             x + 1,
@@ -289,8 +294,13 @@ class InventoryEventHandler(AskUserEventHandler):
             return None
 
     def on_item_selected(self, item: Item) -> Optional[ActionOrHandler]:
-        """Called when the user selects a valid item."""
-        raise NotImplementedError()
+        if item.consumable:
+            # Return the action for the selected item.
+            return item.consumable.get_action(self.engine.player)
+        elif item.equippable:
+            return actions.EquipAction(self.engine.player, item)
+        else:
+            return None
 
 
 
@@ -301,7 +311,13 @@ class InventoryActivateHandler(InventoryEventHandler):
 
     def on_item_selected(self, item: Item) -> Optional[ActionOrHandler]:
         """Return the action for the selected item."""
-        return item.consumable.get_action(self.engine.player)
+        if item.consumable:
+            # Return the action for the selected item.
+            return item.consumable.get_action(self.engine.player)
+        elif item.equippable:
+            return actions.EquipAction(self.engine.player, item)
+        else:
+            return None
 
 
 class InventoryDropHandler(InventoryEventHandler):

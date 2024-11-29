@@ -11,7 +11,7 @@ import traceback
 
 import color
 from engine import Engine
-import entity_factories
+from entity_factories import EntityFactories
 from game_map import GameWorld
 import input_handlers
 
@@ -31,9 +31,10 @@ def new_game() -> Engine:
     max_monsters_per_room = 2
     max_items_per_room = 2
 
+    engine = Engine(player=None, entity_factories=EntityFactories(None))
+    entity_factories = EntityFactories(engine=engine)
     player = copy.deepcopy(entity_factories.player)
-
-    engine = Engine(player=player)
+    engine.player = player
 
     engine.game_world = GameWorld(
         engine=engine,

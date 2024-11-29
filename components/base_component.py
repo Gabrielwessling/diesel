@@ -12,7 +12,9 @@ class BaseComponent:
     parent: Entity  # Owning entity instance.
 
     @property
-    def gamemap(self) -> GameMap:
+    def gamemap(self):
+        if self.parent is None:
+            raise ValueError("Consumable parent is not set.")
         return self.parent.gamemap
 
     @property

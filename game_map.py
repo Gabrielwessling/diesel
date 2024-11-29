@@ -11,6 +11,7 @@ import tile_types
 if TYPE_CHECKING:
     from engine import Engine
     from entity import Entity
+    from entity_factories import EntityFactories
 
 
 class GameMap:

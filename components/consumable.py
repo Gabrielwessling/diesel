@@ -8,6 +8,7 @@ import color
 from components.base_component import BaseComponent
 import components.inventory
 from exceptions import Impossible
+from entity import Entity
 from input_handlers import (
     ActionOrHandler,
     SquareAreaRangedAttackHandler,
@@ -20,7 +21,11 @@ if TYPE_CHECKING:
 
 
 class Consumable(BaseComponent):
-    parent: Item
+    def __init__(self, parent: Optional[Item] = None):
+        if parent:
+            self.parent = parent
+        else:
+            raise ValueError("Consumable must be assigned to an Item.")
 
     def get_action(self, consumer: Actor) -> Optional[ActionOrHandler]:
         """Try to return the action for this item."""
@@ -41,7 +46,8 @@ class Consumable(BaseComponent):
             inventory.items.remove(entity)
 
 class ConfusionConsumable(Consumable):
-    def __init__(self, number_of_turns: int):
+    def __init__(self, number_of_turns: int, parent: Item):
+        super().__init__(parent)  # Ensure parent is assigned
         self.number_of_turns = number_of_turns
 
     def get_action(self, consumer: Actor) -> SingleRangedAttackHandler:
@@ -59,11 +65,11 @@ class ConfusionConsumable(Consumable):
         target = action.target_actor
 
         if not self.engine.game_map.visible[action.target_xy]:
-            raise Impossible("Você não tá vendo esse tile.")
+            raise Impossible("Voce não tá vendo esse tile.")
         if not target:
-            raise Impossible("Você deve selecionar um inimigo.")
+            raise Impossible("Voce deve selecionar um inimigo.")
         if target is consumer:
-            raise Impossible("Você não pode se confundir!")
+            raise Impossible("Voce não pode se confundir!")
 
         self.engine.message_log.add_message(
             f"Os olhos de {target.name} estão distantes, e ele comeca a trupicar!",
@@ -76,7 +82,8 @@ class ConfusionConsumable(Consumable):
         self.consume()
 
 class HealingConsumable(Consumable):
-    def __init__(self, amount: int):
+    def __init__(self, amount: int, parent: Item):
+        super().__init__(parent)  # Ensure parent is assigned
         self.amount = amount
 
     def activate(self, action: actions.ItemAction) -> None:
@@ -94,9 +101,10 @@ class HealingConsumable(Consumable):
             raise Impossible(f"Vida ja esta cheia.")
 
 class FireballDamageConsumable(Consumable):
-    def __init__(self, damage: int, radius: int):
+    def __init__(self, damage: int, radius: int, parent: Item):
         self.damage = damage
         self.radius = radius
+        super().__init__(parent)  # Ensure parent is set correctly
 
     def get_action(self, consumer: Actor) -> CircleAreaRangedAttackHandler:
         self.engine.message_log.add_message(
@@ -129,9 +137,10 @@ class FireballDamageConsumable(Consumable):
         self.consume()
 
 class LightningDamageConsumable(Consumable):
-    def __init__(self, damage: int, maximum_range: int):
+    def __init__(self, damage: int, maximum_range: int, parent: Item):
         self.damage = damage
         self.maximum_range = maximum_range
+        super().__init__(parent)
 
     def activate(self, action: actions.ItemAction) -> None:
         consumer = action.entity

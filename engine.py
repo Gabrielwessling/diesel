@@ -14,6 +14,7 @@ import render_functions
 
 if TYPE_CHECKING:
     from entity import Actor
+    from entity_factories import EntityFactories
     from game_map import GameMap, GameWorld
 
 class Engine:
@@ -23,11 +24,12 @@ class Engine:
     game_world: GameWorld
     message_log: MessageLog
 
-    def __init__(self, player: Actor):
+    def __init__(self, player: Actor, entity_factories: EntityFactories):
         self.message_log = MessageLog
         self.mouse_location = (0, 0)
         self.player = player
         self.message_log = MessageLog()
+        self.entity_factories = entity_factories
 
     def handle_enemy_turns(self) -> None:
         for entity in set(self.game_map.actors) - {self.player}:

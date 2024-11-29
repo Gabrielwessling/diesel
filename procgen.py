@@ -5,7 +5,7 @@ from typing import Iterator, List, Tuple, TYPE_CHECKING
 
 import tcod
 
-import entity_factories
+from entity_factories import EntityFactories
 from game_map import GameMap
 import tile_types
 from entity import Chest, Item
@@ -14,13 +14,16 @@ from entity import Chest, Item
 if TYPE_CHECKING:
     from engine import Engine
 
+entity_factories: EntityFactories
+entity_factories: Engine.entity_factories
 
 class RectangularRoom:
-    def __init__(self, x: int, y: int, width: int, height: int):
+    def __init__(self, x: int, y: int, width: int, height: int, engine: Engine):
         self.x1 = x
         self.y1 = y
         self.x2 = x + width
         self.y2 = y + height
+        self.engine = engine
 
     @property
     def center(self) -> Tuple[int, int]:
@@ -44,7 +47,7 @@ class RectangularRoom:
         )
 
 def place_entities(
-    room: RectangularRoom, dungeon: GameMap, maximum_monsters: int, maximum_items: int, maximum_chests:int
+    room: RectangularRoom, dungeon: GameMap, maximum_monsters: int, maximum_items: int, maximum_chests:int, entity_factories:EntityFactories,
 ) -> None:
     number_of_monsters = random.randint(0, maximum_monsters)
     number_of_items = random.randint(0, maximum_items)
@@ -100,6 +103,7 @@ def generate_dungeon(
 ) -> GameMap:
     """Generate a new dungeon map."""
     player = engine.player
+    entity_factories = engine.entity_factories
     dungeon = GameMap(engine, map_width, map_height, entities=[player])
 
     rooms: List[RectangularRoom] = []
@@ -116,7 +120,7 @@ def generate_dungeon(
         y = random.randint(0, dungeon.height - room_height - 1)
 
         # "RectangularRoom" class makes rectangles easier to work with
-        new_room = RectangularRoom(x, y, room_width, room_height)
+        new_room = RectangularRoom(x, y, room_width, room_height, engine)
 
         # Run through the other rooms and see if they intersect with this one.
         if any(new_room.intersects(other_room) for other_room in rooms):
@@ -146,7 +150,7 @@ def generate_dungeon(
                 dungeon.tiles[x, y] = tile_types.floor_grass
 
         if len(rooms) != 0:
-            place_entities(new_room, dungeon, max_monsters_per_room, max_items_per_room, max_chests_per_room)
+            place_entities(new_room, dungeon, max_monsters_per_room, max_items_per_room, max_chests_per_room, entity_factories)
 
         dungeon.tiles[center_of_last_room] = tile_types.down_stairs
         dungeon.downstairs_location = center_of_last_room

@@ -11,6 +11,8 @@ import exceptions
 if TYPE_CHECKING:
     from components.ai import BaseAI
     from components.consumable import Consumable
+    from components.equippable import Equippable
+    from components.equipment import Equipment
     from components.fighter import Fighter
     from components.inventory import Inventory
     from game_map import GameMap
@@ -94,6 +96,7 @@ class Actor(Entity):
         color: Tuple[int, int, int] = (255, 255, 255),
         name: str = "",
         ai_cls: Type[BaseAI],
+        equipment: Equipment,
         fighter: Fighter,
         inventory: Inventory,
         skill_list: SkillList,
@@ -111,8 +114,12 @@ class Actor(Entity):
 
         # Inicializa o AI e Fighter
         self.ai: Optional[BaseAI] = ai_cls(self)
+
         self.fighter = fighter
         self.fighter.parent = self
+
+        self.equipment: Equipment = equipment
+        self.equipment.parent = self
 
         self.inventory = inventory
         self.inventory.parent = self
@@ -144,9 +151,10 @@ class Item(Entity):
         char: str = "?",
         color: Tuple[int, int, int] = (255, 255, 255),
         name: str = "<Unnamed>",
-        consumable: Consumable,
+        consumable: Optional[Consumable] = None,
+        equippable: Optional[Equippable] = None,
         weight: float = 0,
-        key_id: Optional[int] = None
+        key_id: Optional[int] = None,
     ):
         super().__init__(
             x=x,
@@ -159,7 +167,9 @@ class Item(Entity):
         )
 
         self.consumable = consumable
-        self.consumable.parent = self
+
+        self.equippable = equippable
+
         self.weight = weight
         self.key_id = key_id
 
