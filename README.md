@@ -14,3 +14,6 @@
   - Display
   - if I'm forgetting something please let me know!
 - This stuff is based on the roguelike tutorial for python, and now I'm just going forward and adding what makes sense. This project is just for fun, to learn something and to feel good about doing something. It's mostly for friends and family.
+
+
+### The portuguese stuff is just for testing and mostly there cause I'm brazillian and I never left here. For this reason it's impossible for me to come to brazil.
