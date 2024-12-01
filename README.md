@@ -3,6 +3,17 @@
 
 ### The lore and vibe are almost non-existant outside some ideas that I had in the past. Humour mixed with low life expectancy, goods being valued 100x even the richest lifes in this world and a whole 200 years of forgotten history and tech.
 
+## Controls
+- WASD: vertical/horizontal movement.
+- Q/E: upper diagonal movement
+- Z/C: upper diagonal movement
+- X, Mouse hovering: see what's on a tile
+- H: notification history
+- Left mouse button: target some abilities (in the future you will be able to attack just using this, melee or ranged).
+- ESC: quit game, return to game from inventory and other menus
+- Right mouse button: return
+- Shift + . (>): descend stairs
+
 ## Current Goal
 ### Duild the backbone and slowly turn this into a fun game with at least a little replayability. Of course, trying to always keep it modern with the traditional rogue structure.
 
