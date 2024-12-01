@@ -46,12 +46,12 @@ class PickupAction(Action):
             if actor_location_x == item.x and actor_location_y == item.y:
                 # Check if the item can fit in terms of capacity
                 if len(inventory.items) >= inventory.capacity:
-                    raise exceptions.Impossible("O item é muito pesado para ser carregado.")
+                    raise exceptions.Impossible("O item e muito pesado para ser carregado.")
 
                 # Check if the item can fit in terms of weight
                 total_weight = sum(i.weight for i in inventory.items)
                 if total_weight + item.weight > inventory.max_weight:
-                    raise exceptions.Impossible("O item é muito pesado para ser carregado.")
+                    raise exceptions.Impossible("O item e muito pesado para ser carregado.")
 
                 # Add the item to the inventory
                 self.engine.game_map.entities.remove(item)
@@ -160,7 +160,7 @@ class MeleeAction(ActionWithDirection):
             target.fighter.hp -= damage
         else:
             self.engine.message_log.add_message(
-                f"{attack_desc} mas não dá dano.", attack_color
+                f"{attack_desc} mas nao da dano.", attack_color
             )
 
 class EquipAction(Action):
@@ -189,11 +189,13 @@ class MovementAction(ActionWithDirection):
                     # Aqui você pode acessar métodos ou atributos da classe Chest
                     for item in blocking_entity.break_chest(self.engine.player):
                         item.spawn(self.engine.game_map, dest_x, dest_y)
+                        item.parent = self.engine.game_map
                     self.engine.message_log.add_message("Bau quebrado!")
                     return  # Finaliza a ação após interagir com o baú
                 else:
                     for item in blocking_entity.open(self.engine.player):
                         item.spawn(self.engine.game_map, dest_x, dest_y)
+                        item.parent = self.engine.game_map
                     self.engine.message_log.add_message("Bau aberto!")
                     return  # Finaliza a ação após interagir com o baú
             raise exceptions.Impossible("Esse caminho esta bloqueado por uma Entity.")

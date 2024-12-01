@@ -44,8 +44,8 @@ floor_grass = new_tile(
 floor_grass_alt = new_tile(
     walkable=True,
     transparent=True,
-    dark=(ord("w"), (161, 70, 52), (125, 119, 119)),
-    light=(ord("w"), (181, 90, 72), (145, 139, 139)),
+    dark=(ord("w"), (102, 88, 88), (125, 119, 119)),
+    light=(ord("w"), (112, 98, 98), (145, 139, 139)),
 )
 
 wall_stone = new_tile(

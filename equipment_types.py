@@ -2,18 +2,16 @@ from enum import auto, Enum
 
 
 class EquipmentType(Enum):
-    MELEE_WEAPON = auto()
-    THROW_WEAPON = auto()
-    RANGED_WEAPON = auto()
+    HANDS = auto()
     TORSO = auto()
     ARMS = auto()
-    HAND = auto()
+    GLOVES = auto()
     LEGS = auto()
     FEET = auto()
     MOUTH = auto()
     EYES = auto()
     HEAD = auto()
-    SHOULDER = auto()
+    SHOULDERS = auto()
     RING = auto()
     NECKLACE = auto()
     TABARD = auto()

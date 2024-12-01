@@ -1,0 +1,318 @@
+<items>
+    <consumables>
+        <item>
+            <name>Garrafa de 51</name>
+            <char>!</char>
+            <color>255,0,100</color>
+            <consumableClass>HealingConsumable</consumableClass>
+            <amount>4</amount>
+            <weight>1.45</weight>
+        </item>
+        <item>
+            <name>Pilha Estragada</name>
+            <char>}</char>
+            <color>200,200,0</color>
+            <consumableClass>LightningDamageConsumable</consumableClass>
+            <damage>15</damage>
+            <maximum_range>5</maximum_range>
+            <weight>0.07</weight>
+        </item>
+        <item>
+            <name>Lancador de Crack</name>
+            <char>=</char>
+            <color>207,63,255</color>
+            <consumableClass>ConfusionConsumable</consumableClass>
+            <number_of_turns>10</number_of_turns>
+            <weight>1.34</weight>
+        </item>
+        <item>
+            <name>Coquetel Molotov</name>
+            <char>~</char>
+            <color>255,0,0</color>
+            <consumableClass>FireballDamageConsumable</consumableClass>
+            <damage>12</damage>
+            <radius>3</radius>
+            <weight>1.65</weight>
+        </item>
+    </consumables>
+
+    <equipables>
+        <!-- Weapons -->
+        <item>
+            <name>Faca Sem Fio</name>
+            <char>/</char>
+            <color>70,70,70</color>
+            <equippableClass>Dagger</equippableClass>
+            <weight>0.15</weight>
+        </item>
+        <item>
+            <name>Espada Fundo de Garagem</name>
+            <char>/</char>
+            <color>215,200,150</color>
+            <equippableClass>Sword</equippableClass>
+            <weight>0.4</weight>
+        </item>
+        <item>
+            <name>Porrete Ex-Policial</name>
+            <char>p</char>
+            <color>15,15,55</color>
+            <equippableClass>Hammer</equippableClass>
+            <weight>0.5</weight>
+        </item>
+        <item>
+            <name>Espeta Otario</name>
+            <char>|</char>
+            <color>255,50,200</color>
+            <equippableClass>Spear</equippableClass>
+            <weight>0.7</weight>
+        </item>
+        <item>
+            <name>Machado 'Diassis'</name>
+            <char>*</char>
+            <color>255,70,80</color>
+            <equippableClass>Axe</equippableClass>
+            <weight>0.4</weight>
+        </item>
+        <item>
+            <name>Pedra</name>
+            <char>o</char>
+            <color>30,30,55</color>
+            <equippableClass>Throwable</equippableClass>
+            <weight>0.15</weight>
+        </item>
+        <item>
+            <name>Apenas Arco</name>
+            <char>/</char>
+            <color>0,200,100</color>
+            <equippableClass>Bow</equippableClass>
+            <weight>0.3</weight>
+        </item>
+        <item>
+            <name>Pistola Mugger-73</name>
+            <char>_</char>
+            <color>150,50,150</color>
+            <equippableClass>Pistol</equippableClass>
+            <weight>0.4</weight>
+        </item>
+        <item>
+            <name>Rifle AK-37</name>
+            <char>_</char>
+            <color>92,53,5</color>
+            <equippableClass>Rifle</equippableClass>
+            <weight>0.7</weight>
+        </item>
+        <item>
+            <name>Lançador de Pedras</name>
+            <char>_</char>
+            <color>5,47,82</color>
+            <equippableClass>Launcher</equippableClass>
+            <weight>1.0</weight>
+        </item>
+        <!-- Torso Armor -->
+        <item>
+            <name>Camiseta do Linkin Park</name>
+            <char>&amp;</char>
+            <color>26,82,21</color>
+            <equippableClass>Shirt</equippableClass>
+            <weight>0.3</weight>
+        </item>
+        <item>
+            <name>Trapos de Couro</name>
+            <char>&amp;</char>
+            <color>41,27,20</color>
+            <equippableClass>Light_Body_Armor</equippableClass>
+            <weight>0.8</weight>
+        </item>
+        <item>
+            <name>Armadura de Latinhas</name>
+            <char>&amp;</char>
+            <color>72,46,74</color>
+            <equippableClass>Medium_Body_Armor</equippableClass>
+            <weight>1.2</weight>
+        </item>
+        <item>
+            <name>Armadura de Placas de Transito</name>
+            <char>&amp;</char>
+            <color>99,17,43</color>
+            <equippableClass>Heavy_Body_Armor</equippableClass>
+            <weight>6.8</weight>
+        </item>
+        <!-- Arm Armor -->
+        <item>
+            <name>Bracadeira</name>
+            <char>)</char>
+            <color>120,5,18</color>
+            <equippableClass>Arm_Band</equippableClass>
+            <weight>0.1</weight>
+        </item>
+        <item>
+            <name>Bracadeira de Couro</name>
+            <char>)</char>
+            <color>87,56,15</color>
+            <equippableClass>Light_Arm_Armor</equippableClass>
+            <weight>0.2</weight>
+        </item>
+        <item>
+            <name>Bracadeira de Latinhas</name>
+            <char>)</char>
+            <color>48,59,61</color>
+            <equippableClass>Medium_Arm_Armor</equippableClass>
+            <weight>0.4</weight>
+        </item>
+        <item>
+            <name>Bracadeira de Metal Pesado</name>
+            <char>)</char>
+            <color>18,14,13</color>
+            <equippableClass>Heavy_Arm_Armor</equippableClass>
+            <weight>0.8</weight>
+        </item>
+        <!-- Footwear -->
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>50,50,50</color>
+            <equippableClass>Light_Sabatons</equippableClass>
+            <weight>1.0</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>70,70,70</color>
+            <equippableClass>Medium_Sabatons</equippableClass>
+            <weight>1.5</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>90,90,90</color>
+            <equippableClass>Heavy_Sabatons</equippableClass>
+            <weight>2.0</weight>
+        </item>
+        
+        <!-- Gloves -->
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>30,30,30</color>
+            <equippableClass>Gloves</equippableClass>
+            <weight>0.5</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>60,60,60</color>
+            <equippableClass>Light_Glove_Armor</equippableClass>
+            <weight>0.6</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>90,90,90</color>
+            <equippableClass>Medium_Glove_Armor</equippableClass>
+            <weight>0.8</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>120,120,120</color>
+            <equippableClass>Heavy_Glove_Armor</equippableClass>
+            <weight>1.0</weight>
+        </item>
+        
+        <!-- Leggings -->
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>40,40,40</color>
+            <equippableClass>Light_Leg_Armor</equippableClass>
+            <weight>1.2</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>80,80,80</color>
+            <equippableClass>Medium_Leg_Armor</equippableClass>
+            <weight>1.5</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>120,120,120</color>
+            <equippableClass>Heavy_Leg_Armor</equippableClass>
+            <weight>2.0</weight>
+        </item>
+        
+        <!-- Head Clothing -->
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>100,100,100</color>
+            <equippableClass>Light_Helmet</equippableClass>
+            <weight>0.8</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>150,150,150</color>
+            <equippableClass>Medium_Helmet</equippableClass>
+            <weight>1.2</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>200,200,200</color>
+            <equippableClass>Heavy_Helmet</equippableClass>
+            <weight>1.5</weight>
+        </item>
+        
+        <!-- Shoulder Clothing -->
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>80,80,80</color>
+            <equippableClass>Light_Shoulder_Pads</equippableClass>
+            <weight>0.6</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>120,120,120</color>
+            <equippableClass>Medium_Shoulder_Pads</equippableClass>
+            <weight>1.0</weight>
+        </item>
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>160,160,160</color>
+            <equippableClass>Heavy_Shoulder_Pads</equippableClass>
+            <weight>1.5</weight>
+        </item>
+        
+        <!-- Rings -->
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>255,255,255</color>
+            <equippableClass>Ring</equippableClass>
+            <weight>0.1</weight>
+        </item>
+
+        <!-- Necklace -->
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>255,200,200</color>
+            <equippableClass>Necklace</equippableClass>
+            <weight>0.2</weight>
+        </item>
+
+        <!-- Tabard -->
+        <item>
+            <name>NEED_NAME</name>
+            <char>N</char>
+            <color>100,100,255</color>
+            <equippableClass>Tabard</equippableClass>
+            <weight>0.4</weight>
+        </item>
+    </equipables>
+</items>

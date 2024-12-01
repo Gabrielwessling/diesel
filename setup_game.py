@@ -31,8 +31,9 @@ def new_game() -> Engine:
     max_monsters_per_room = 2
     max_items_per_room = 2
 
-    engine = Engine(player=None, entity_factories=EntityFactories(None))
-    entity_factories = EntityFactories(engine=engine)
+    engine = Engine(player=None, entity_factories=EntityFactories(None, None))
+    entity_factories = EntityFactories(engine=engine, gamemap=None)
+    engine.entity_factories = entity_factories
     player = copy.deepcopy(entity_factories.player)
     engine.player = player
 
@@ -47,6 +48,7 @@ def new_game() -> Engine:
         max_items_per_room=max_items_per_room,
     )
     engine.game_world.generate_floor()
+    engine.entity_factories.gamemap = engine.game_map
     engine.update_fov()
 
     engine.message_log.add_message(

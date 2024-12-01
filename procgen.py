@@ -3,12 +3,13 @@ from __future__ import annotations
 import random
 from typing import Iterator, List, Tuple, TYPE_CHECKING
 
+import numpy as np
 import tcod
 
 from entity_factories import EntityFactories
 from game_map import GameMap
 import tile_types
-from entity import Chest, Item
+from entity import Chest, Item, Actor
 
 
 if TYPE_CHECKING:
@@ -59,7 +60,9 @@ def place_entities(
 
         if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
             dice = random.randint(0, (len(entity_factories.monsters) - 1))
-            entity_factories.monsters[dice].spawn(dungeon, x, y)
+            entity: Actor = entity_factories.monsters[dice]
+            entity.parent = dungeon
+            entity.spawn(dungeon, x, y)
 
     for i in range(number_of_items):
         x = random.randint(room.x1 + 1, room.x2 - 1)
@@ -67,7 +70,9 @@ def place_entities(
 
         if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
             dice = random.randint(0, (len(entity_factories.items) - 1))
-            entity_factories.items[dice].spawn(dungeon, x, y)
+            entity: Item = entity_factories.items[dice]
+            entity.parent = dungeon
+            entity.spawn(dungeon, x, y)
 
 
 def tunnel_between(
@@ -89,6 +94,20 @@ def tunnel_between(
     for x, y in tcod.los.bresenham((corner_x, corner_y), (x2, y2)).tolist():
         yield x, y
 
+
+def modify_floor_tiles(dungeon: GameMap) -> None:
+    """Modify all floor tiles of the dungeon with some chance of alternation."""
+    chance_of_alt_tile = 0.02  # Adjust probability as needed
+
+    # Create a random mask for the entire dungeon
+    random_mask = np.random.rand(*dungeon.tiles.shape) < chance_of_alt_tile
+
+    # Apply alternation only to tiles that are `floor_grass`
+    floor_mask = dungeon.tiles == tile_types.floor_grass  # Identify all floor tiles
+    alternation_mask = random_mask & floor_mask  # Combine the random mask with the floor mask
+
+    # Apply alternate tiles where the mask is True
+    dungeon.tiles[alternation_mask] = tile_types.floor_grass_alt
 
 def generate_dungeon(
     max_rooms: int,
@@ -130,14 +149,8 @@ def generate_dungeon(
         # Dig out this rooms inner area.
         dungeon.tiles[new_room.inner] = tile_types.floor_grass
 
-        for col in range(len(dungeon.tiles[new_room.inner][0])):  # Acessa todas as colunas
-            for row in range(len(dungeon.tiles[new_room.inner])):
-                chanceOfAltTile = 0.2
-                rd = random.Random()
-                dice = rd.randint(0, 100)
-
-                if dice <= int(chanceOfAltTile * 100):
-                    dungeon.tiles[new_room.inner][row][col] = tile_types.floor_grass_alt
+        for room in rooms:
+            modify_floor_tiles(dungeon)
     
         center_of_last_room = new_room.center
 

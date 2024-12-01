@@ -30,7 +30,7 @@ class Equipment(BaseComponent):
     def defense_bonus(self) -> int:
         bonus = 0
         for slot, item in self.slots.items():
-            if item and item.equippable:
+            if item and item.equippable and item.equippable.equipment_type is not EquipmentType.HANDS:
                 bonus += item.equippable.defense_bonus
         return bonus
 
@@ -38,7 +38,7 @@ class Equipment(BaseComponent):
     def power_bonus(self) -> int:
         bonus = 0
         for slot, item in self.slots.items():
-            if item and item.equippable:
+            if item and item.equippable and item.equippable.equipment_type is EquipmentType.HANDS:
                 bonus += item.equippable.power_bonus
         return bonus
 

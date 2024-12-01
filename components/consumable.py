@@ -24,8 +24,6 @@ class Consumable(BaseComponent):
     def __init__(self, parent: Optional[Item] = None):
         if parent:
             self.parent = parent
-        else:
-            raise ValueError("Consumable must be assigned to an Item.")
 
     def get_action(self, consumer: Actor) -> Optional[ActionOrHandler]:
         """Try to return the action for this item."""
@@ -65,14 +63,14 @@ class ConfusionConsumable(Consumable):
         target = action.target_actor
 
         if not self.engine.game_map.visible[action.target_xy]:
-            raise Impossible("Voce não tá vendo esse tile.")
+            raise Impossible("Voce nao ta vendo esse tile.")
         if not target:
             raise Impossible("Voce deve selecionar um inimigo.")
         if target is consumer:
-            raise Impossible("Voce não pode se confundir!")
+            raise Impossible("Voce nao pode se confundir!")
 
         self.engine.message_log.add_message(
-            f"Os olhos de {target.name} estão distantes, e ele comeca a trupicar!",
+            f"Os olhos de {target.name} estao distantes, e ele comeca a trupicar!",
             color.status_effect_applied,
         )
         self.engine.player.skill_list.skills[1].add_xp(45)
@@ -163,4 +161,4 @@ class LightningDamageConsumable(Consumable):
             target.fighter.take_damage(self.damage)
             self.consume()
         else:
-            raise Impossible("Não existe alvo próximo.")
+            raise Impossible("Nao existe alvo proximo.")

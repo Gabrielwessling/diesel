@@ -19,18 +19,19 @@ def main() -> None:
     screen_height = 35
 
     tileset = tcod.tileset.load_tilesheet(
-        "tilesets/dejavu10.png", 32, 8, tcod.tileset.CHARMAP_TCOD
+        "tilesets/frogblock.png", 16, 16, tcod.tileset.CHARMAP_CP437
     )
 
     handler: input_handlers.BaseEventHandler = setup_game.MainMenu()
-
+    
     with tcod.context.new_terminal(
-        screen_width,
-        screen_height,
+        190,
+        90,
         tileset=tileset,
         title="DIESEL 0.0",
         vsync=True,
     ) as context:
+        root_console: tcod.console
         root_console = tcod.Console(screen_width, screen_height, order="F")
         try:
             while True:
@@ -57,6 +58,6 @@ def main() -> None:
         except BaseException:  # Save on any other unexpected exception.
             save_game(handler, "savegame.sav")
             raise
-
+    
 if __name__ == "__main__":
     main()

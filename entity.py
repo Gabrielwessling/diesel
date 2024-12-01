@@ -7,6 +7,7 @@ from typing import Optional, Tuple, Type, TypeVar, TYPE_CHECKING, Union, List
 
 from render_order import RenderOrder # imports de dentro
 import exceptions
+from game_map import GameMap
 
 if TYPE_CHECKING:
     from components.ai import BaseAI
@@ -15,7 +16,6 @@ if TYPE_CHECKING:
     from components.equipment import Equipment
     from components.fighter import Fighter
     from components.inventory import Inventory
-    from game_map import GameMap
     from components.skill_list import SkillList
 
 T = TypeVar("T", bound="Entity")
@@ -50,10 +50,16 @@ class Entity:
             # If parent isn't provided now then it will be set later.
             self.parent = parent
             parent.entities.add(self)
-
+            
+    @property
+    def key_items(self) -> dict[int, Item]:
+        return {item.key_id: item for item in self.inventory.items if item.key_id is not None}
+    
     @property
     def gamemap(self) -> GameMap:
-        return self.parent.gamemap
+        if isinstance(self.parent, GameMap):
+            return self.parent
+        #raise AttributeError(f"{self.name} não tem um GameMap associado.")
 
     def spawn(self: T, gamemap: GameMap, x: int, y: int) -> T:
         """Spawn a copy of this instance at the given location."""
@@ -65,15 +71,13 @@ class Entity:
         return clone
 
     def place(self, x: int, y: int, gamemap: Optional[GameMap] = None) -> None:
-        """Place this entity at a new location.  Handles moving across GameMaps."""
         self.x = x
         self.y = y
-        if gamemap:
-            if hasattr(self, "parent"):  # Possibly uninitialized.
-                if self.parent is self.gamemap:
-                    self.gamemap.entities.remove(self)
-            self.parent = gamemap
-            gamemap.entities.add(self)
+        if hasattr(self, "parent") and self.parent is not None:
+            if isinstance(self.parent, GameMap):
+                self.parent.entities.remove(self)
+        self.parent = gamemap
+        gamemap.entities.add(self)
 
     def distance(self, x: int, y: int) -> float:
         """
@@ -100,6 +104,7 @@ class Actor(Entity):
         fighter: Fighter,
         inventory: Inventory,
         skill_list: SkillList,
+        parent: Optional[GameMap] = None,
     ):
         # Inicializa a classe pai Entity, mas sem atribuir o gamemap
         super().__init__(
@@ -110,6 +115,7 @@ class Actor(Entity):
             name=name,
             blocks_movement=True,
             render_order=RenderOrder.ACTOR,
+            parent=parent
         )
 
         # Inicializa o AI e Fighter
@@ -155,6 +161,7 @@ class Item(Entity):
         equippable: Optional[Equippable] = None,
         weight: float = 0,
         key_id: Optional[int] = None,
+        parent: Optional[GameMap] = None, 
     ):
         super().__init__(
             x=x,
@@ -164,6 +171,7 @@ class Item(Entity):
             name=name,
             blocks_movement=False,
             render_order=RenderOrder.ITEM,
+            parent=parent
         )
 
         self.consumable = consumable
@@ -254,10 +262,4 @@ class Chest(Entity):
         return items
 
     def _player_has_key(self, actor: Actor) -> bool:
-        """Verifica se o jogador possui a chave correspondente ao baú."""
-        if not self.chest_id:
-            return False
-        for item in actor.inventory.items:
-            if hasattr(item, "key_id") and item.key_id == self.chest_id:
-                return True
-        return False
+        return self.chest_id in actor.inventory.key_items

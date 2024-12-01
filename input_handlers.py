@@ -62,6 +62,12 @@ CONFIRM_KEYS = {
     tcod.event.K_KP_ENTER,
 }
 
+EXIT_KEYS = {
+    tcod.event.KeySym.ESCAPE,
+    tcod.event.KeySym.BACKSPACE,
+    tcod.event.MouseButton.RIGHT,
+}
+
 ActionOrHandler = Union[Action, "BaseEventHandler"]
 """An event handler return value which can trigger an action or switch active handlers.
 
@@ -209,14 +215,14 @@ class InventoryEventHandler(AskUserEventHandler):
         inventory = self.engine.player.inventory
         grouped_items = {}
         for item in inventory.items:
-            item.name.replace("[E]", "")
+            item.name = item.name.replace("[E] ", "")
             if item.name in grouped_items and not self.engine.player.equipment.item_is_equipped(item):
                 grouped_items[item.name]["count"] += 1
             elif not self.engine.player.equipment.item_is_equipped(item):
-                item.name.removeprefix("[E]")
+                item.name = item.name.replace("[E] ", "")
                 grouped_items[item.name] = {"item": item, "count": 1}
             elif self.engine.player.equipment.item_is_equipped(item):
-                item.name = "[E]" + item.name
+                item.name = "[E] " + item.name
                 grouped_items[item.name] = {"item": item, "count": 1}
 
         # Convert to a sorted list for display
@@ -281,16 +287,19 @@ class InventoryEventHandler(AskUserEventHandler):
             console.print(x + 1, y + 2, "(Vazio)")
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[ActionOrHandler]:
+        if event.sym in EXIT_KEYS:  # Handle Escape key
+            return MainGameEventHandler(self.engine)  # Return to the main game handler
+        
         player = self.engine.player
         key = event.sym
         index = key - tcod.event.K_1
-
+        
         if 0 <= index < len(self.grouped_items):
             # Seleciona o item agrupado correto
             _, selected_item, _ = self.grouped_items[index]
             return self.on_item_selected(selected_item)
         else:
-            self.engine.message_log.add_message("Input inválido.", color.invalid)
+            self.engine.message_log.add_message("Input invalido.", color.invalid)
             return None
 
     def on_item_selected(self, item: Item) -> Optional[ActionOrHandler]:
