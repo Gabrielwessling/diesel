@@ -22,6 +22,8 @@ def get_names_at_location(x: int, y: int, game_map: GameMap) -> str:
 def render_names_at_mouse_location(
     console: Console, x: int, y: int, engine: Engine
 ) -> None:
+    if not hasattr(engine, "game_map"):
+        return
     mouse_x, mouse_y = engine.mouse_location
 
     names_at_mouse_location = get_names_at_location(

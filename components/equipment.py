@@ -56,12 +56,12 @@ class Equipment(BaseComponent):
 
     def unequip_message(self, item_name: str) -> None:
         self.parent.gamemap.engine.message_log.add_message(
-            f"You remove the {item_name}."
+            f"Você desequipa {item_name}."
         )
 
     def equip_message(self, item_name: str) -> None:
         self.parent.gamemap.engine.message_log.add_message(
-            f"You equip the {item_name}."
+            f"Você equipa {item_name}."
         )
 
     def equip_to_slot(self, slot: EquipmentType, item: Item, add_message: bool) -> None:

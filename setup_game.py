@@ -1,5 +1,6 @@
 """Handle the loading and initialization of game sessions."""
 from __future__ import annotations
+from tcod import libtcodpy
 
 from typing import Optional
 
@@ -49,6 +50,7 @@ def new_game() -> Engine:
     )
     engine.game_world.generate_floor()
     engine.entity_factories.gamemap = engine.game_map
+    engine.game_map.engine = engine
     engine.update_fov()
 
     engine.message_log.add_message(
@@ -66,28 +68,29 @@ def load_game(filename: str) -> Engine:
 class MainMenu(input_handlers.BaseEventHandler):
     """Handle the main menu rendering and input."""
 
-    def on_render(self, console: tcod.Console) -> None:
+    def on_render(self, console: tcod.console.Console) -> None:
         """Render the main menu on a background image."""
         console.draw_semigraphics(background_image, 0, 0)
+        console.draw_frame(console.width // 2 - 50, console.height // 2 - 25, 100, 50)
 
         console.print(
             console.width // 2,
             console.height // 2 - 4,
             "DIESEL",
             fg=color.menu_title,
-            alignment=tcod.CENTER,
+            alignment=libtcodpy.CENTER,
         )
         console.print(
             console.width // 2,
             console.height - 2,
             "feito pelo gabe",
             fg=color.menu_title,
-            alignment=tcod.CENTER,
+            alignment=libtcodpy.CENTER,
         )
 
         menu_width = 24
         for i, text in enumerate(
-            ["[N] Novo Jogo", "[C] Continuar", "[Q] Quitar"]
+            ["[N] Novo Jogo","[C] Carregar" , "[Q] Quitar"]
         ):
             console.print(
                 console.width // 2,
@@ -95,16 +98,16 @@ class MainMenu(input_handlers.BaseEventHandler):
                 text.ljust(menu_width),
                 fg=color.menu_text,
                 bg=color.black,
-                alignment=tcod.CENTER,
-                bg_blend=tcod.BKGND_ALPHA(64),
+                alignment=libtcodpy.CENTER,
+                bg_blend=libtcodpy.BKGND_ALPHA(64),
             )
 
     def ev_keydown(
         self, event: tcod.event.KeyDown
     ) -> Optional[input_handlers.BaseEventHandler]:
-        if event.sym in (tcod.event.K_q, tcod.event.K_ESCAPE):
+        if event.sym in (tcod.event.KeySym.q, tcod.event.KeySym.ESCAPE):
             raise SystemExit()
-        elif event.sym == tcod.event.K_c:
+        elif event.sym == tcod.event.KeySym.c:
             try:
                 return input_handlers.MainGameEventHandler(load_game("savegame.sav"))
             except FileNotFoundError:
@@ -112,8 +115,7 @@ class MainMenu(input_handlers.BaseEventHandler):
             except Exception as exc:
                 traceback.print_exc()  # Print to stderr.
                 return input_handlers.PopupMessage(self, f"Failed to load save:\n{exc}")
-            pass
-        elif event.sym == tcod.event.K_n:
+        elif event.sym == tcod.event.KeySym.n:
             return input_handlers.MainGameEventHandler(new_game())
 
         return None

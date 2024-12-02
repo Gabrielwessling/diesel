@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 import lzma
 import pickle
+import aiofiles  # For asynchronous file handling
 from tcod.console import Console
 from tcod.map import compute_fov
 
@@ -50,7 +51,8 @@ class Engine:
         self.game_map.explored |= self.game_map.visible
 
     def render(self, console: Console) -> None:
-        self.game_map.render(console)
+        if hasattr(self, "game_map"):
+            self.game_map.render(console)
 
         self.message_log.render(console=console, x=17, y=31, width=41, height=4)
 
@@ -61,11 +63,11 @@ class Engine:
             total_width=15,
         )
 
-        render_functions.render_names_at_mouse_location(console=console, x=1, y=1, engine=self)
+        render_functions.render_names_at_mouse_location(console=console, x=0, y=0, engine=self)
         render_functions.render_dungeon_level(
             console=console,
             dungeon_level=self.game_world.current_floor,
-            location=(20, 0),
+            location=(0, 1),
         )
 
     def save_as(self, filename: str) -> None:

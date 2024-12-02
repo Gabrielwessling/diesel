@@ -1,0 +1,259 @@
+{
+  "enemies": [
+    {
+      "char": "v",
+      "color": "127,63,63",
+      "name": "Vagabundo",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 10,
+        "base_defense": 0,
+        "base_power": 3
+      },
+      "inventory": {
+        "capacity": 26,
+        "max_weight": 55
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "t",
+      "color": "200,50,50",
+      "name": "Assaltante Motorizado",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 12,
+        "base_defense": 1,
+        "base_power": 4
+      },
+      "inventory": {
+        "capacity": 30,
+        "max_weight": 60
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "r",
+      "color": "50,200,50",
+      "name": "Piloto de Combate",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 15,
+        "base_defense": 2,
+        "base_power": 5
+      },
+      "inventory": {
+        "capacity": 20,
+        "max_weight": 50
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "z",
+      "color": "255,255,0",
+      "name": "Zumbi Radioativo",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 20,
+        "base_defense": 1,
+        "base_power": 3
+      },
+      "inventory": {
+        "capacity": 35,
+        "max_weight": 70
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "b",
+      "color": "100,100,255",
+      "name": "Batedor de Estrada",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 18,
+        "base_defense": 3,
+        "base_power": 4
+      },
+      "inventory": {
+        "capacity": 28,
+        "max_weight": 65
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "g",
+      "color": "255,100,100",
+      "name": "Mercenário",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 10,
+        "base_defense": 2,
+        "base_power": 5
+      },
+      "inventory": {
+        "capacity": 25,
+        "max_weight": 60
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "k",
+      "color": "200,50,200",
+      "name": "Ladrão de Combustível",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 12,
+        "base_defense": 1,
+        "base_power": 3
+      },
+      "inventory": {
+        "capacity": 30,
+        "max_weight": 55
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "m",
+      "color": "180,180,50",
+      "name": "Guerreiro Cibernético",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 25,
+        "base_defense": 4,
+        "base_power": 7
+      },
+      "inventory": {
+        "capacity": 40,
+        "max_weight": 75
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "f",
+      "color": "50,255,255",
+      "name": "Feiticeiro de Metal",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 12,
+        "base_defense": 0,
+        "base_power": 8
+      },
+      "inventory": {
+        "capacity": 20,
+        "max_weight": 50
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "s",
+      "color": "255,0,255",
+      "name": "Vidente da Tempestade",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 14,
+        "base_defense": 1,
+        "base_power": 6
+      },
+      "inventory": {
+        "capacity": 25,
+        "max_weight": 60
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "w",
+      "color": "255,150,50",
+      "name": "Canibal Mutante",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 18,
+        "base_defense": 2,
+        "base_power": 6
+      },
+      "inventory": {
+        "capacity": 28,
+        "max_weight": 65
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "c",
+      "color": "50,50,200",
+      "name": "Soldado Blindado",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 30,
+        "base_defense": 5,
+        "base_power": 8
+      },
+      "inventory": {
+        "capacity": 35,
+        "max_weight": 80
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "j",
+      "color": "255,255,150",
+      "name": "Caçador de Ferro",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 22,
+        "base_defense": 3,
+        "base_power": 5
+      },
+      "inventory": {
+        "capacity": 30,
+        "max_weight": 70
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "d",
+      "color": "200,200,50",
+      "name": "Droner",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 15,
+        "base_defense": 1,
+        "base_power": 4
+      },
+      "inventory": {
+        "capacity": 25,
+        "max_weight": 60
+      },
+      "equipment": {},
+      "skill_list": {}
+    },
+    {
+      "char": "x",
+      "color": "180,100,255",
+      "name": "Mecânico Insano",
+      "ai_cls": "HostileEnemy",
+      "fighter": {
+        "hp": 20,
+        "base_defense": 4,
+        "base_power": 5
+      },
+      "inventory": {
+        "capacity": 40,
+        "max_weight": 75
+      },
+      "equipment": {},
+      "skill_list": {}
+    }
+  ]
+}

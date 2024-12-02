@@ -20,46 +20,56 @@ if TYPE_CHECKING:
     from engine import Engine
     from entity import Item
 
+KEY_BINDINGS = {
+    "inventory": tcod.event.KeySym.i,
+    "drop_item": tcod.event.KeySym.o,
+    "look_around": tcod.event.KeySym.x,
+    "skills": tcod.event.KeySym.TAB,
+    "pickup": tcod.event.KeySym.g,
+    "history": tcod.event.KeySym.h,
+    "quit": tcod.event.KeySym.ESCAPE,
+}
+
 MOVE_KEYS = {
     # WASDQEZC keys
-    tcod.event.K_w: (0, -1),
-    tcod.event.K_a: (-1, 0),
-    tcod.event.K_s: (0, 1),
-    tcod.event.K_d: (1, 0),
-    tcod.event.K_q: (-1, -1),
-    tcod.event.K_e: (1, -1),
-    tcod.event.K_z: (-1, 1),
-    tcod.event.K_c: (1, 1),
-    # Arrow keys.
-    tcod.event.K_UP: (0, -1),
-    tcod.event.K_DOWN: (0, 1),
-    tcod.event.K_LEFT: (-1, 0),
-    tcod.event.K_RIGHT: (1, 0),
-    tcod.event.K_HOME: (-1, -1),
-    tcod.event.K_END: (-1, 1),
-    tcod.event.K_PAGEUP: (1, -1),
-    tcod.event.K_PAGEDOWN: (1, 1),
+    tcod.event.KeySym.w: (0, -1),
+    tcod.event.KeySym.a: (-1, 0),
+    tcod.event.KeySym.s: (0, 1),
+    tcod.event.KeySym.d: (1, 0),
+    tcod.event.KeySym.q: (-1, -1),
+    tcod.event.KeySym.e: (1, -1),
+    tcod.event.KeySym.z: (-1, 1),
+    tcod.event.KeySym.c: (1, 1),
+
+    tcod.event.KeySym.UP: (0, -1),
+    tcod.event.KeySym.DOWN: (0, 1),
+    tcod.event.KeySym.LEFT: (-1, 0),
+    tcod.event.KeySym.RIGHT: (1, 0),
+    tcod.event.KeySym.HOME: (-1, -1),
+    tcod.event.KeySym.END: (-1, 1),
+    tcod.event.KeySym.PAGEUP: (1, -1),
+    tcod.event.KeySym.PAGEDOWN: (1, 1),
     # Numpad keys.
-    tcod.event.K_KP_1: (-1, 1),
-    tcod.event.K_KP_2: (0, 1),
-    tcod.event.K_KP_3: (1, 1),
-    tcod.event.K_KP_4: (-1, 0),
-    tcod.event.K_KP_6: (1, 0),
-    tcod.event.K_KP_7: (-1, -1),
-    tcod.event.K_KP_8: (0, -1),
-    tcod.event.K_KP_9: (1, -1),
+    tcod.event.KeySym.KP_1: (-1, 1),
+    tcod.event.KeySym.KP_2: (0, 1),
+    tcod.event.KeySym.KP_3: (1, 1),
+    tcod.event.KeySym.KP_4: (-1, 0),
+    tcod.event.KeySym.KP_6: (1, 0),
+    tcod.event.KeySym.KP_7: (-1, -1),
+    tcod.event.KeySym.KP_8: (0, -1),
+    tcod.event.KeySym.KP_9: (1, -1),
 }
 
 WAIT_KEYS = {
-    tcod.event.K_PERIOD,
-    tcod.event.K_KP_5,
-    tcod.event.K_CLEAR,
-    tcod.event.K_SPACE
+    tcod.event.KeySym.PERIOD,
+    tcod.event.KeySym.KP_5,
+    tcod.event.KeySym.CLEAR,
+    tcod.event.KeySym.SPACE
 }
 
 CONFIRM_KEYS = {
-    tcod.event.K_RETURN,
-    tcod.event.K_KP_ENTER,
+    tcod.event.KeySym.RETURN,
+    tcod.event.KeySym.KP_ENTER,
 }
 
 EXIT_KEYS = {
@@ -129,6 +139,8 @@ class EventHandler(BaseEventHandler):
         return True
 
     def ev_mousemotion(self, event: tcod.event.MouseMotion) -> None:
+        if not hasattr(self.engine, "game_map"):
+            return
         if self.engine.game_map.in_bounds(event.tile.x, event.tile.y):
             self.engine.mouse_location = event.tile.x, event.tile.y
     
@@ -167,12 +179,12 @@ class AskUserEventHandler(EventHandler):
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[ActionOrHandler]:
         """By default any key exits this input handler."""
         if event.sym in {  # Ignore modifier keys.
-            tcod.event.K_LSHIFT,
-            tcod.event.K_RSHIFT,
-            tcod.event.K_LCTRL,
-            tcod.event.K_RCTRL,
-            tcod.event.K_LALT,
-            tcod.event.K_RALT,
+            tcod.event.KeySym.LSHIFT,
+            tcod.event.KeySym.RSHIFT,
+            tcod.event.KeySym.LCTRL,
+            tcod.event.KeySym.RCTRL,
+            tcod.event.KeySym.LALT,
+            tcod.event.KeySym.RALT,
         }:
             return None
         return self.on_exit()
@@ -212,21 +224,16 @@ class InventoryEventHandler(AskUserEventHandler):
             - item: A reference to one of the grouped items.
             - count: The number of items in the group.
         """
-        inventory = self.engine.player.inventory
-        grouped_items = {}
-        for item in inventory.items:
-            item.name = item.name.replace("[E] ", "")
-            if item.name in grouped_items and not self.engine.player.equipment.item_is_equipped(item):
-                grouped_items[item.name]["count"] += 1
-            elif not self.engine.player.equipment.item_is_equipped(item):
-                item.name = item.name.replace("[E] ", "")
-                grouped_items[item.name] = {"item": item, "count": 1}
-            elif self.engine.player.equipment.item_is_equipped(item):
-                item.name = "[E] " + item.name
-                grouped_items[item.name] = {"item": item, "count": 1}
+        grouped = {}
+        for item in self.engine.player.inventory.items:
+            key = f"[E] {item.name}" if self.engine.player.equipment.item_is_equipped(item) else item.name
+            if key in grouped:
+                grouped[key]["count"] += 1
+            else:
+                grouped[key] = {"item": item, "count": 1}
 
-        # Convert to a sorted list for display
-        return [(name, data["item"], data["count"]) for name, data in grouped_items.items()]
+        # Convert grouped items to a list of tuples
+        return [(name, data["item"], data["count"]) for name, data in grouped.items()]
 
     def on_render(self, console: tcod.Console) -> None:
         """
@@ -292,7 +299,7 @@ class InventoryEventHandler(AskUserEventHandler):
         
         player = self.engine.player
         key = event.sym
-        index = key - tcod.event.K_1
+        index = key - tcod.event.KeySym.N1
         
         if 0 <= index < len(self.grouped_items):
             # Seleciona o item agrupado correto
@@ -484,31 +491,30 @@ class MainGameEventHandler(EventHandler):
 
         player = self.engine.player
 
-        if key == tcod.event.K_TAB:
-            # Abre a interface de habilidades ao pressionar Tab
-            return SkillsViewer(self.engine)
 
-        if key == tcod.event.K_PERIOD and modifier & (
-            tcod.event.KMOD_LSHIFT | tcod.event.KMOD_RSHIFT
+        if key == tcod.event.KeySym.PERIOD and modifier & (
+            tcod.event.KeySym.LSHIFT | tcod.event.KeySym.RSHIFT
         ):
             return actions.TakeStairsAction(player)
 
         if key in MOVE_KEYS:
             dx, dy = MOVE_KEYS[key]
             action = BumpAction(player, dx, dy)
+        elif key == KEY_BINDINGS["skills"]:
+            return SkillsViewer(self.engine)
         elif key in WAIT_KEYS:
             action = WaitAction(player)
-        elif key == tcod.event.K_h:
+        elif key == KEY_BINDINGS["history"]:
             return HistoryViewer(self.engine)
-        elif key == tcod.event.K_g:
+        elif key == KEY_BINDINGS["pickup"]:
             action = PickupAction(player)
-        elif key == tcod.event.K_i:
+        elif key == KEY_BINDINGS["inventory"]:
             return InventoryActivateHandler(self.engine)
-        elif key == tcod.event.K_o:
+        elif key == KEY_BINDINGS["drop_item"]:
             return InventoryDropHandler(self.engine)
-        elif key == tcod.event.K_x:
+        elif key == KEY_BINDINGS["look_around"]:
             return LookHandler(self.engine)
-        elif key == tcod.event.K_ESCAPE:
+        elif key == KEY_BINDINGS["quit"]:
             raise SystemExit
 
         # No valid key was pressed
@@ -525,14 +531,14 @@ class GameOverEventHandler(EventHandler):
         self.on_quit()
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> None:
-        if event.sym == tcod.event.K_ESCAPE:
+        if event.sym == tcod.event.KeySym.ESCAPE:
             self.on_quit()
 
 CURSOR_Y_KEYS = {
-    tcod.event.K_UP: -1,
-    tcod.event.K_DOWN: 1,
-    tcod.event.K_PAGEUP: -10,
-    tcod.event.K_PAGEDOWN: 10,
+    tcod.event.KeySym.UP: -1,
+    tcod.event.KeySym.DOWN: 1,
+    tcod.event.KeySym.PAGEUP: -10,
+    tcod.event.KeySym.PAGEDOWN: 10,
 }
 
 class HistoryViewer(EventHandler):
@@ -546,7 +552,7 @@ class HistoryViewer(EventHandler):
     def on_render(self, console: tcod.Console) -> None:
         super().on_render(console)  # Draw the main state as the background.
 
-        log_console = tcod.Console(console.width - 6, console.height - 6)
+        log_console = tcod.console.Console(console.width - 6, console.height - 6)
 
         # Draw a frame with a custom banner title.
         log_console.draw_frame(0, 0, log_console.width, log_console.height)
@@ -578,9 +584,9 @@ class HistoryViewer(EventHandler):
             else:
                 # Otherwise move while staying clamped to the bounds of the history log.
                 self.cursor = max(0, min(self.cursor + adjust, self.log_length - 1))
-        elif event.sym == tcod.event.K_HOME:
+        elif event.sym == tcod.event.KeySym.HOME:
             self.cursor = 0  # Move directly to the top message.
-        elif event.sym == tcod.event.K_END:
+        elif event.sym == tcod.event.KeySym.END:
             self.cursor = self.log_length - 1  # Move directly to the last message.
         else:  # Any other key moves back to the main game state.
             return MainGameEventHandler(self.engine)
