@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Iterable, Iterator, Optional, TYPE_CHECKING
 import numpy as np  # type: ignore
 from tcod.console import Console
+import gc
 
 import tile_types
 import entity as ENT
@@ -15,6 +16,7 @@ class GameMap:
     def __init__(
         self, engine: Engine, width: int, height: int, entities: Iterable[Entity] = ()
     ):
+        print (f" - Initializing GameMap...")
         self.engine = engine
         self.width, self.height = width, height
         self.entities = set(entities)
@@ -28,19 +30,23 @@ class GameMap:
         )  # Tiles the player has seen before
 
         self.downstairs_location = (0, 0)
+        print (f" - GameMap Initialized, {len(self.tiles)} tiles...")
 
     @property
     def actors(self) -> Iterator[ENT.Actor]:
         """Iterate over this map's living actors."""
+        print (f" - Iterating over living ACTORS inside map...")
         yield from (entity for entity in self.entities if isinstance(entity, ENT.Actor) and entity.is_alive)
 
     @property
     def items(self) -> Iterator[ENT.Item]:
         """Iterate over items on this map."""
+        print (f" - Iterating over ITEMS inside map...")
         yield from (entity for entity in self.entities if isinstance(entity, ENT.Item))
 
     def get_blocking_entity_at_location(self, x: int, y: int) -> Optional[Entity]:
         """Get a blocking entity at a location."""
+        print (f" - Getting blocking ENTITY at location x:{x} y:{y}...")
         return next(
             (entity for entity in self.entities if entity.blocks_movement and entity.x == x and entity.y == y),
             None,
@@ -48,13 +54,18 @@ class GameMap:
 
     def get_actor_at_location(self, x: int, y: int) -> Optional[Actor]:
         """Get an actor at a specific location."""
+        print (f" - Getting ACTOR at location x:{x} y:{y}...")
         return next((actor for actor in self.actors if actor.x == x and actor.y == y), None)
 
     def get_locations_of_tile(self, tile_type) -> list[tuple[int, int]]:
         """
         Return a list of all locations in the map that have the specified tile type.
         """
-        return [tuple(loc) for loc in np.argwhere(self.tiles == tile_type)]
+        print (f" - Getting list of all locations in the map that have {tile_type} tiles...")
+        LIST = [tuple(loc) for loc in np.argwhere(self.tiles == tile_type)]
+        for i in range(len(LIST)):
+            print (f" - x:{LIST[i][0]} y:{LIST[i][1]} ...")
+        return LIST
 
     def in_bounds(self, x: int, y: int) -> bool:
         """Return True if x and y are inside of the bounds of this map."""
@@ -111,13 +122,21 @@ class GameWorld:
         self.current_floor = current_floor
 
     def generate_floor(self) -> None:
-        """
-        Generate a new floor, increasing the floor count.
-        """
+        """Generate a new floor, increasing the floor count."""
         from procgen import generate_dungeon
 
         self.current_floor += 1
 
+        # Limpa o mapa anterior para evitar referências persistentes.
+        if hasattr(self.engine, "game_map"):
+            self.engine.game_map.entities.clear()
+            del self.engine.game_map
+
+        gc.collect()
+        for obj in gc.garbage:
+            print(obj)
+            
+        # Gera o novo mapa.
         self.engine.game_map = generate_dungeon(
             max_rooms=self.max_rooms,
             room_min_size=self.room_min_size,

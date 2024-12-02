@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as ET
+import json
 from components.ai import HostileEnemy
 from components import consumable, equippable
 from components.equipment import Equipment
@@ -7,10 +7,9 @@ from components.inventory import Inventory
 from entity import Actor, Item, Chest
 from components.skill_list import SkillList
 from typing import Tuple
-import random
 
 class EntityFactories:
-    def __init__(self, engine, gamemap, xml_file="data\items.xml"):
+    def __init__(self, engine, gamemap, json_file="data/items.json", enemies_json="data/enemies.json"):
         # Initializing lists
         self.monsters = []
         self.items = []
@@ -33,7 +32,7 @@ class EntityFactories:
         
         # Initialize Key Items and add to the key_items list
         self.chave = Item(
-            char=";",
+            char="µ",
             color=(100, 100, 100),
             name="Chave",
             weight=0.01,
@@ -44,7 +43,7 @@ class EntityFactories:
         # Initialize Chests and add to the chests list
         self.chest = Chest(
             char="C",
-            color=(77, 77, 15),
+            color=(45, 45, 15),
             name="Caixa",
             locked=False,
             chest_id=0,
@@ -53,103 +52,62 @@ class EntityFactories:
         )
         self.chests.append(self.chest)
 
-        # Load data from XML
-        tree = ET.parse(xml_file)
-        root = tree.getroot()
+        # Load data from JSON for items
+        with open(json_file, "r") as file:
+            data = json.load(file)
         
         # Create consumables
-        for consumable in root.find("consumables").findall("item"):
-            item = self.create_consumable(consumable)
+        for consumable_data in data["items"]["consumables"]:
+            item = self.create_consumable(consumable_data)
             item.consumable.parent = item
             self.items.append(item)
 
         # Create equipables
-        for equipable in root.find("equipables").findall("item"):
-            item = self.create_equipable(equipable)
+        for equipable_data in data["items"]["equipables"]:
+            item = self.create_equipable(equipable_data)
             item.equippable.parent = item
             self.items.append(item)
-            
-        #temp
-        # Initialize Monsters and add to the monsters list
-        self.vagabundo = Actor(
-            char="v",
-            color=(127, 63, 63),
-            name="Vagabundo",
-            ai_cls=HostileEnemy,
-            equipment=Equipment(),
-            fighter=Fighter(hp=10, base_defense=0, base_power=3),
-            inventory=Inventory(capacity=26, max_weight=55),
-            skill_list=SkillList(parent=gamemap, engine=engine),
-        )
-        self.monsters.append(self.vagabundo)
-
-        self.bandido = Actor(
-            char="b",
-            color=(120, 70, 40),
-            name="Bandido",
-            ai_cls=HostileEnemy,
-            equipment=Equipment(),
-            fighter=Fighter(hp=5, base_defense=1, base_power=1),
-            inventory=Inventory(capacity=26, max_weight=55),
-            skill_list=SkillList(parent=gamemap, engine=engine),
-        )
-        self.monsters.append(self.bandido)
-
-        self.viciado = Actor(
-            char="V",
-            color=(0, 127, 0),
-            name="Viciado",
-            ai_cls=HostileEnemy,
-            equipment=Equipment(),
-            fighter=Fighter(hp=16, base_defense=1, base_power=3),
-            inventory=Inventory(capacity=26, max_weight=55),
-            skill_list=SkillList(parent=gamemap, engine=engine),
-        )
-        self.monsters.append(self.viciado)
-
-        self.cachorro = Actor(
-            char="c",
-            color=(120, 60, 30),
-            name="Cao Sarnento",
-            ai_cls=HostileEnemy,
-            equipment=Equipment(),
-            fighter=Fighter(hp=1, base_defense=0, base_power=5),
-            inventory=Inventory(capacity=1, max_weight=30),
-            skill_list=SkillList(parent=gamemap, engine=engine),
-        )
-        self.monsters.append(self.cachorro)
-
-        self.mecanico = Actor(
-            char="m",
-            color=(120, 60, 120),
-            name="Mecânico Louco",
-            ai_cls=HostileEnemy,
-            equipment=Equipment(),
-            fighter=Fighter(hp=20, base_defense=-2, base_power=1),
-            inventory=Inventory(capacity=26, max_weight=55),
-            skill_list=SkillList(parent=gamemap, engine=engine),
-        )
-        self.monsters.append(self.mecanico)
         
+        # Load enemies data
+        with open(enemies_json, "r") as file:
+            enemies_data = json.load(file)["enemies"]
+
+        # Initialize Monsters and add to the monsters list
+        for enemy_data in enemies_data:
+            monster = Actor(
+                char=enemy_data["char"],
+                color=self.parse_color(enemy_data["color"]),
+                name=enemy_data["name"],
+                ai_cls=HostileEnemy,
+                equipment=Equipment(),
+                fighter=Fighter(hp=enemy_data["fighter"]["hp"], 
+                                base_defense=enemy_data["fighter"]["base_defense"], 
+                                base_power=enemy_data["fighter"]["base_power"]),
+                inventory=Inventory(capacity=enemy_data["inventory"]["capacity"], 
+                                     max_weight=enemy_data["inventory"]["max_weight"]),
+                skill_list=SkillList(parent=gamemap, engine=engine),
+            )
+            self.monsters.append(monster)
+
     def parse_color(self, color_str: str) -> Tuple[int, int, int]:
         """Parse a color string like '255,0,0' into a tuple (255, 0, 0)."""
         return tuple(map(int, color_str.split(",")))
 
     def create_consumable(self, data) -> Item:
-        """Create a consumable item from XML data."""
-        name = data.find("name").text
-        char = data.find("char").text
-        color = self.parse_color(data.find("color").text)
-        weight = float(data.find("weight").text)
+        """Create a consumable item from JSON data."""
+        name = data["name"]
+        char = data["char"]
+        color = self.parse_color(data["color"])
+        weight = float(data["weight"])
 
         # Dynamically get the consumable class
-        consumable_class = getattr(consumable, data.find("consumableClass").text)
+        consumable_class = getattr(consumable, data["consumableClass"])
 
-        # Gather arguments dynamically
+        # Gather arguments dynamically for the consumable
         consumable_args = {}
-        for arg in data:
-            if arg.tag not in {"name", "char", "color", "consumableClass", "weight"}:
-                consumable_args[arg.tag] = float(arg.text) if "." in arg.text else int(arg.text)
+        for key, value in data.items():
+            if key not in {"name", "char", "color", "consumableClass", "weight"}:
+                consumable_args[key] = float(value) if "." in str(value) else int(value)
 
         return Item(
             char=char,
@@ -160,14 +118,14 @@ class EntityFactories:
         )
 
     def create_equipable(self, data) -> Item:
-        """Create an equipable item from XML data."""
-        name = data.find("name").text
-        char = data.find("char").text
-        color = self.parse_color(data.find("color").text)
-        weight = float(data.find("weight").text)
+        """Create an equipable item from JSON data."""
+        name = data["name"]
+        char = data["char"]
+        color = self.parse_color(data["color"])
+        weight = float(data["weight"])
 
         # Dynamically get the equippable class
-        equippable_class = getattr(equippable, data.find("equippableClass").text)
+        equippable_class = getattr(equippable, data["equippableClass"])
 
         return Item(
             char=char,
@@ -175,7 +133,4 @@ class EntityFactories:
             name=name,
             equippable=equippable_class(parent=None),
             weight=weight,
-        )  
-        
-        
-        
+        )

@@ -75,7 +75,8 @@ class Entity:
         self.y = y
         if hasattr(self, "parent") and self.parent is not None:
             if isinstance(self.parent, GameMap):
-                self.parent.entities.remove(self)
+                if self.parent.entities.__contains__(self):
+                    self.parent.entities.remove(self)
         self.parent = gamemap
         gamemap.entities.add(self)
 
