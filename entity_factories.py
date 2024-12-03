@@ -88,7 +88,7 @@ class EntityFactories:
                 skill_list=SkillList(parent=gamemap, engine=engine),
             )
             self.monsters.append(monster)
-
+        
     def parse_color(self, color_str: str) -> Tuple[int, int, int]:
         """Parse a color string like '255,0,0' into a tuple (255, 0, 0)."""
         return tuple(map(int, color_str.split(",")))

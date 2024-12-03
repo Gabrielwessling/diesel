@@ -3,12 +3,12 @@
     {
       "char": "v",
       "color": "127,63,63",
-      "name": "Vagabundo",
+      "name": "Vagabond",
       "ai_cls": "HostileEnemy",
       "fighter": {
         "hp": 10,
-        "base_defense": 0,
-        "base_power": 3
+        "base_defense": 1,
+        "base_power": 1
       },
       "inventory": {
         "capacity": 26,
@@ -18,14 +18,14 @@
       "skill_list": {}
     },
     {
-      "char": "t",
+      "char": "A",
       "color": "200,50,50",
-      "name": "Assaltante Motorizado",
+      "name": "MotorMan Assalt 2",
       "ai_cls": "HostileEnemy",
       "fighter": {
         "hp": 12,
         "base_defense": 1,
-        "base_power": 4
+        "base_power": 3
       },
       "inventory": {
         "capacity": 30,
@@ -35,14 +35,14 @@
       "skill_list": {}
     },
     {
-      "char": "r",
+      "char": "p",
       "color": "50,200,50",
-      "name": "Piloto de Combate",
+      "name": "Combat Pilot",
       "ai_cls": "HostileEnemy",
       "fighter": {
-        "hp": 15,
+        "hp": 13,
         "base_defense": 2,
-        "base_power": 5
+        "base_power": 2
       },
       "inventory": {
         "capacity": 20,
@@ -54,12 +54,12 @@
     {
       "char": "z",
       "color": "255,255,0",
-      "name": "Zumbi Radioativo",
+      "name": "Rad Zed",
       "ai_cls": "HostileEnemy",
       "fighter": {
-        "hp": 20,
-        "base_defense": 1,
-        "base_power": 3
+        "hp": 40,
+        "base_defense": -2,
+        "base_power": 2
       },
       "inventory": {
         "capacity": 35,
@@ -71,12 +71,12 @@
     {
       "char": "b",
       "color": "100,100,255",
-      "name": "Batedor de Estrada",
+      "name": "Jimmy Robber",
       "ai_cls": "HostileEnemy",
       "fighter": {
-        "hp": 18,
-        "base_defense": 3,
-        "base_power": 4
+        "hp": 10,
+        "base_defense": 2,
+        "base_power": 3
       },
       "inventory": {
         "capacity": 28,
@@ -86,14 +86,14 @@
       "skill_list": {}
     },
     {
-      "char": "g",
+      "char": "M",
       "color": "255,100,100",
-      "name": "Mercenário",
+      "name": "Mercenary",
       "ai_cls": "HostileEnemy",
       "fighter": {
-        "hp": 10,
-        "base_defense": 2,
-        "base_power": 5
+        "hp": 16,
+        "base_defense": 1,
+        "base_power": 3
       },
       "inventory": {
         "capacity": 25,
@@ -103,14 +103,14 @@
       "skill_list": {}
     },
     {
-      "char": "k",
+      "char": "L",
       "color": "200,50,200",
-      "name": "Ladrão de Combustível",
+      "name": "Diesel Thief",
       "ai_cls": "HostileEnemy",
       "fighter": {
-        "hp": 12,
+        "hp": 4,
         "base_defense": 1,
-        "base_power": 3
+        "base_power": 1
       },
       "inventory": {
         "capacity": 30,
@@ -120,14 +120,14 @@
       "skill_list": {}
     },
     {
-      "char": "m",
+      "char": "à",
       "color": "180,180,50",
-      "name": "Guerreiro Cibernético",
+      "name": "RobotCop",
       "ai_cls": "HostileEnemy",
       "fighter": {
-        "hp": 25,
-        "base_defense": 4,
-        "base_power": 7
+        "hp": 100,
+        "base_defense": 6,
+        "base_power": 2
       },
       "inventory": {
         "capacity": 40,
@@ -137,14 +137,14 @@
       "skill_list": {}
     },
     {
-      "char": "f",
+      "char": "B",
       "color": "50,255,255",
-      "name": "Feiticeiro de Metal",
+      "name": "Metal Band Member",
       "ai_cls": "HostileEnemy",
       "fighter": {
         "hp": 12,
-        "base_defense": 0,
-        "base_power": 8
+        "base_defense": -1,
+        "base_power": 5
       },
       "inventory": {
         "capacity": 20,
@@ -156,7 +156,7 @@
     {
       "char": "s",
       "color": "255,0,255",
-      "name": "Vidente da Tempestade",
+      "name": "Tech-Priest IKEA Manager",
       "ai_cls": "HostileEnemy",
       "fighter": {
         "hp": 14,
@@ -173,10 +173,10 @@
     {
       "char": "w",
       "color": "255,150,50",
-      "name": "Canibal Mutante",
+      "name": "Mutant Canibal",
       "ai_cls": "HostileEnemy",
       "fighter": {
-        "hp": 18,
+        "hp": 4,
         "base_defense": 2,
         "base_power": 6
       },
@@ -190,12 +190,12 @@
     {
       "char": "c",
       "color": "50,50,200",
-      "name": "Soldado Blindado",
+      "name": "Untouchable Soldier",
       "ai_cls": "HostileEnemy",
       "fighter": {
-        "hp": 30,
-        "base_defense": 5,
-        "base_power": 8
+        "hp": 1,
+        "base_defense": 10,
+        "base_power": 3
       },
       "inventory": {
         "capacity": 35,
@@ -207,7 +207,7 @@
     {
       "char": "j",
       "color": "255,255,150",
-      "name": "Caçador de Ferro",
+      "name": "Steel Hunter",
       "ai_cls": "HostileEnemy",
       "fighter": {
         "hp": 22,
@@ -241,7 +241,7 @@
     {
       "char": "x",
       "color": "180,100,255",
-      "name": "Mecânico Insano",
+      "name": "Insane Mechanic",
       "ai_cls": "HostileEnemy",
       "fighter": {
         "hp": 20,
