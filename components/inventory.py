@@ -24,3 +24,11 @@ class Inventory(BaseComponent):
         item.place(self.parent.x, self.parent.y, self.gamemap)
 
         self.engine.message_log.add_message(f"Voce dropa {item.name}.")
+        
+    @property
+    def key_items(self) -> dict[int, Item]:
+        """
+        Retorna um dicionário de itens no inventário que têm um key_id não nulo.
+        A chave do dicionário é o key_id e o valor é o item.
+        """
+        return {item.key_id: item for item in self.items if item.key_id is not None}

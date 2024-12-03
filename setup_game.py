@@ -65,27 +65,53 @@ def load_game(filename: str) -> Engine:
     assert isinstance(engine, Engine)
     return engine
 
+def draw_fullscreen_image(console: tcod.console.Console, image: tcod.image.Image):
+    """Desenha uma imagem ajustada ao tamanho do console."""
+    image_width, image_height = image.width, image.height
+    console_width, console_height = console.width, console.height
+
+    # Calcula o fator de escala para preencher a tela
+    scale_x = console_width / image_width
+    scale_y = console_height / image_height
+
+    # Aplica a escala mínima para preservar o aspecto
+    scale = min(scale_x, scale_y)
+
+    # Calcula as novas dimensões da imagem com base no fator de escala
+    new_width = int(image_width * scale)
+    new_height = int(image_height * scale)
+
+    # Redimensiona a imagem
+    image.scale(new_width, new_height)
+    
+    # Desenha a imagem redimensionada no console
+    image.blit(console, 0, 0, bg_blend=1, scale_x=2.03, scale_y=2.06, angle=0)
+
 class MainMenu(input_handlers.BaseEventHandler):
     """Handle the main menu rendering and input."""
 
     def on_render(self, console: tcod.console.Console) -> None:
         """Render the main menu on a background image."""
-        console.draw_semigraphics(background_image, 0, 0)
-        console.draw_frame(console.width // 2 - 50, console.height // 2 - 25, 100, 50)
+        image = tcod.image.Image(75, 35).from_file("images\menu_background.png")
+        draw_fullscreen_image(console, image)
 
         console.print(
             console.width // 2,
             console.height // 2 - 4,
             "DIESEL",
             fg=color.menu_title,
+            bg=color.black,
             alignment=libtcodpy.CENTER,
+            bg_blend=libtcodpy.BKGND_ALPHA(64),
         )
         console.print(
             console.width // 2,
             console.height - 2,
             "by Gabriel Wessling",
             fg=color.menu_title,
+            bg=color.black,
             alignment=libtcodpy.CENTER,
+            bg_blend=libtcodpy.BKGND_ALPHA(64),
         )
 
         menu_width = 24

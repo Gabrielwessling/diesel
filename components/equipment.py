@@ -43,7 +43,7 @@ class Equipment(BaseComponent):
         return bonus
 
     @property
-    def range(self) -> int:
+    def range_bonus(self) -> int:
         bonus = 0
         for slot, item in self.slots.items():
             if item and item.equippable and item.equippable.equipment_type is EquipmentType.HANDS:

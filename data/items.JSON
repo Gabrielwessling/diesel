@@ -67,7 +67,7 @@
         },
         {
           "name": "'Diassis' Axe",
-          "char": "*",
+          "char": "|",
           "color": "255,70,80",
           "equippableClass": "Axe",
           "weight": 0.4
@@ -186,70 +186,70 @@
         },
         {
           "name": "Gloves",
-          "char": "•",
+          "char": "*",
           "color": "30,30,30",
           "equippableClass": "Gloves",
           "weight": 0.5
         },
         {
           "name": "Hand Hand-Made Armor",
-          "char": "•",
+          "char": "*",
           "color": "60,60,60",
           "equippableClass": "Light_Glove_Armor",
           "weight": 0.6
         },
         {
           "name": "Can Seal Chainmail Glove",
-          "char": "•",
+          "char": "*",
           "color": "90,90,90",
           "equippableClass": "Medium_Glove_Armor",
           "weight": 0.8
         },
         {
           "name": "Bruteforce Cyberglove 2000",
-          "char": "•",
+          "char": "*",
           "color": "120,120,120",
           "equippableClass": "Heavy_Glove_Armor",
           "weight": 1.0
         },
         {
           "name": "Old World Blue Jeans",
-          "char": "§",
+          "char": "^",
           "color": "40,40,40",
           "equippableClass": "Light_Leg_Armor",
           "weight": 1.2
         },
         {
           "name": "Two 1m Aluminum Tubes",
-          "char": "§",
+          "char": "^",
           "color": "80,80,80",
           "equippableClass": "Medium_Leg_Armor",
           "weight": 1.5
         },
         {
           "name": "Metallic Golden Leg Iron",
-          "char": "§",
+          "char": "^",
           "color": "120,120,120",
           "equippableClass": "Heavy_Leg_Armor",
           "weight": 2.0
         },
         {
           "name": "Default Cap",
-          "char": "◄",
+          "char": "<",
           "color": "100,100,100",
           "equippableClass": "Light_Helmet",
           "weight": 0.8
         },
         {
           "name": "Medieval Football Helmet",
-          "char": "◄",
+          "char": "<",
           "color": "150,150,150",
           "equippableClass": "Medium_Helmet",
           "weight": 1.2
         },
         {
           "name": "Solid Inox Fantasy Mage Hat",
-          "char": "◄",
+          "char": "<",
           "color": "200,200,200",
           "equippableClass": "Heavy_Helmet",
           "weight": 1.5
@@ -277,21 +277,21 @@
         },
         {
         "name": "Ring",
-        "char": "♂",
+        "char": "+",
         "color": "255,255,255",
         "equippableClass": "Ring",
         "weight": 0.1
         },
         {
         "name": "Necklace",
-        "char": "♂",
+        "char": "+",
         "color": "255,200,200",
         "equippableClass": "Necklace",
         "weight": 0.2
         },
         {
         "name": "Tabard",
-        "char": "♂",
+        "char": "+",
         "color": "100,100,255",
         "equippableClass": "Tabard",
         "weight": 0.4

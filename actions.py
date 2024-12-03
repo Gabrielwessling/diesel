@@ -137,6 +137,13 @@ class ActionWithDirection(Action):
 class MeleeAction(ActionWithDirection):
     def perform(self) -> None:
         target = self.target_actor
+        
+        #setting color
+        if self.entity is self.engine.player:
+            attack_color = color.player_atk
+        else:
+            attack_color = color.enemy_atk
+            
         if not target:
             raise exceptions.Impossible("You can't attack the air.")
 
@@ -151,13 +158,13 @@ class MeleeAction(ActionWithDirection):
             return
         
         damage = self.entity.fighter.power - target.fighter.defense
+        
+        extra_damage = int((random.randint(-self.entity.fighter.power, self.entity.fighter.power)) / 2)
+
+        damage += extra_damage
 
         attack_desc = f"{self.entity.name.capitalize()} attacks {target.name}"
         
-        if self.entity is self.engine.player:
-            attack_color = color.player_atk
-        else:
-            attack_color = color.enemy_atk
 
         if damage > 0:
             if self.entity is self.engine.player:

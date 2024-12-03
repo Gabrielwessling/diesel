@@ -60,11 +60,11 @@ class Fighter(BaseComponent):
     
     @property
     def range(self) -> int:
-        return self.range + self.range
+        return self.base_range + self.range_bonus
     
     @property
     def dexterity(self) -> int:
-        return self.dexterity + self.dexterity_bonus
+        return self.base_dexterity + self.dexterity_bonus
 
     @property
     def defense_bonus(self) -> int:
@@ -88,9 +88,9 @@ class Fighter(BaseComponent):
             return 0
 
     @property
-    def range(self) -> int:
+    def range_bonus(self) -> int:
         if self.parent.equipment:
-            return self.parent.equipment.range
+            return self.parent.equipment.range_bonus
         else:
             return 0
 

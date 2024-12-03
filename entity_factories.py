@@ -38,7 +38,7 @@ class EntityFactories:
             weight=0.01,
             key_id=0
         )
-        self.key_items.append(self.chave)
+        self.key_items.append(self.key)
 
         # Initialize Chests and add to the chests list
         self.container = Chest(
@@ -50,7 +50,7 @@ class EntityFactories:
             breakable=True,
             items=[],
         )
-        self.chests.append(self.chest)
+        self.chests.append(self.container)
 
         # Load data from JSON for items
         with open(json_file, "r") as file:
