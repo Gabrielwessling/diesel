@@ -31,20 +31,20 @@ class EntityFactories:
         )
         
         # Initialize Key Items and add to the key_items list
-        self.chave = Item(
+        self.key = Item(
             char="µ",
             color=(100, 100, 100),
-            name="Chave",
+            name="Key",
             weight=0.01,
             key_id=0
         )
         self.key_items.append(self.chave)
 
         # Initialize Chests and add to the chests list
-        self.chest = Chest(
+        self.container = Chest(
             char="C",
             color=(45, 45, 15),
-            name="Caixa",
+            name="Container",
             locked=False,
             chest_id=0,
             breakable=True,

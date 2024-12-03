@@ -291,7 +291,7 @@ class InventoryEventHandler(AskUserEventHandler):
                     f"({item_key}) {item_name} x{count}",
                 )
         else:
-            console.print(x + 1, y + 2, "(Vazio)")
+            console.print(x + 1, y + 2, "(Empty)")
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[ActionOrHandler]:
         if event.sym in EXIT_KEYS:  # Handle Escape key
@@ -306,7 +306,7 @@ class InventoryEventHandler(AskUserEventHandler):
             _, selected_item, _ = self.grouped_items[index]
             return self.on_item_selected(selected_item)
         else:
-            self.engine.message_log.add_message("Input invalido.", color.invalid)
+            self.engine.message_log.add_message("Invalid Input.", color.invalid)
             return None
 
     def on_item_selected(self, item: Item) -> Optional[ActionOrHandler]:
@@ -323,7 +323,7 @@ class InventoryEventHandler(AskUserEventHandler):
 class InventoryActivateHandler(InventoryEventHandler):
     """Handle using an inventory item."""
 
-    TITLE = "Selecione um item para usar"
+    TITLE = "Select an Item to use"
 
     def on_item_selected(self, item: Item) -> Optional[ActionOrHandler]:
         """Return the action for the selected item."""
@@ -339,7 +339,7 @@ class InventoryActivateHandler(InventoryEventHandler):
 class InventoryDropHandler(InventoryEventHandler):
     """Handle dropping an inventory item."""
 
-    TITLE = "Selecione um item para dropar"
+    TITLE = "Drop Item"
 
     def on_item_selected(self, item: Item) -> Optional[ActionOrHandler]:
         """Drop this item."""
@@ -557,7 +557,7 @@ class HistoryViewer(EventHandler):
         # Draw a frame with a custom banner title.
         log_console.draw_frame(0, 0, log_console.width, log_console.height)
         log_console.print_box(
-            0, 0, log_console.width, 1, "┤Historico├", alignment=tcod.CENTER
+            0, 0, log_console.width, 1, "┤History Browser├", alignment=tcod.CENTER
         )
 
         # Render the message log using the cursor parameter.
@@ -606,12 +606,12 @@ class SkillsViewer(EventHandler):
         skills_console = tcod.Console(console.width - 6, console.height - 6)
         skills_console.draw_frame(0, 0, skills_console.width, skills_console.height)
         skills_console.print_box(
-            0, 0, skills_console.width, 1, "┤ Habilidades & Status ├", alignment=tcod.CENTER
+            0, 0, skills_console.width, 1, "┤ Status ├", alignment=tcod.CENTER
         )
 
         # Validando se `skill_list` existe
         if not hasattr(self.player, "skill_list") or self.player.skill_list is None:
-            skills_console.print(1, 5, "Nenhuma habilidade encontrada.")
+            skills_console.print(1, 5, "No skill found.")
             skills_console.blit(console, 3, 3)
             return
 
@@ -619,7 +619,7 @@ class SkillsViewer(EventHandler):
         y_offset = 2
         for i, skill in enumerate(self.player.skill_list.skills):  # Itera pelas habilidades
             skill_line = (
-                f"{skill.name}: Level {skill.current_level} - {skill.experience_to_next_level} XP faltando para upar"
+                f"{skill.name}: Level {skill.current_level} - {skill.experience_to_next_level} xp to next level"
             )
             skills_console.print(1, y_offset + i * 2, skill_line)
 

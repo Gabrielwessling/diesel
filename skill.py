@@ -54,19 +54,3 @@ class Skill:
             self.current_xp -= self.experience_to_next_level
             self.current_level += 1
             self.engine.message_log.add_message(f"Your {self.name} skill has leveled up!")
-
-    def increase_power(self, amount: int = 1) -> None:
-        """Increase the character's power and base power."""
-        if self.parent and hasattr(self.parent, "fighter"):
-            self.parent.fighter.base_power += amount
-            self.engine.message_log.add_message("You feel stronger!")
-        else:
-            raise ValueError("Parent does not have a 'fighter' attribute")
-
-    def increase_defense(self, amount: int = 1) -> None:
-        """Increase the character's defense and base defense."""
-        if self.parent and hasattr(self.parent, "fighter"):
-            self.parent.fighter.base_defense += amount
-            self.engine.message_log.add_message("Your movements are getting swifter!")
-        else:
-            raise ValueError("Parent does not have a 'fighter' attribute")

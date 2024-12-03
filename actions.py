@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 from typing import Optional, Tuple, TYPE_CHECKING
 
 import color
@@ -46,12 +47,12 @@ class PickupAction(Action):
             if actor_location_x == item.x and actor_location_y == item.y:
                 # Check if the item can fit in terms of capacity
                 if len(inventory.items) >= inventory.capacity:
-                    raise exceptions.Impossible("O item e muito pesado para ser carregado.")
+                    raise exceptions.Impossible("You can't shove the item in your inventory.")
 
                 # Check if the item can fit in terms of weight
                 total_weight = sum(i.weight for i in inventory.items)
                 if total_weight + item.weight > inventory.max_weight:
-                    raise exceptions.Impossible("O item e muito pesado para ser carregado.")
+                    raise exceptions.Impossible("You're too weak to carry more.")
 
                 # Add the item to the inventory
                 self.engine.game_map.entities.remove(item)
@@ -59,16 +60,16 @@ class PickupAction(Action):
 
                 inventory.items.append(item)
 
-                self.engine.message_log.add_message(f"Voce pega {item.name}!")
+                self.engine.message_log.add_message(f"You get {item.name}")
                 return
 
-        raise exceptions.Impossible("Nada para pegar aqui.")
+        raise exceptions.Impossible("You can't get the air.")
     
 class ItemAction(Action):
     def __init__(self, entity: Actor, item: Item, target_xy: Optional[Tuple[int, int]] = None):
         super().__init__(entity)
         if item is None:
-            raise ValueError("Item nao pode ser None")
+            raise ValueError("Item can't be None")
         self.item = item
         if not target_xy:
             target_xy = entity.x, entity.y
@@ -102,10 +103,10 @@ class TakeStairsAction(Action):
         if (self.entity.x, self.entity.y) == self.engine.game_map.downstairs_location:
             self.engine.game_world.generate_floor()
             self.engine.message_log.add_message(
-                "Voce desce as escadas.", color.descend
+                "You descend the stairs.", color.descend
             )
         else:
-            raise exceptions.Impossible("Nao tem escadas aqui.")
+            raise exceptions.Impossible("You can't descend into matter.")
 
 class ActionWithDirection(Action):
     def __init__(self, entity: Actor, dx: int, dy: int):
@@ -137,11 +138,21 @@ class MeleeAction(ActionWithDirection):
     def perform(self) -> None:
         target = self.target_actor
         if not target:
-            raise exceptions.Impossible("Nada para atacar.")
+            raise exceptions.Impossible("You can't attack the air.")
 
+        chance_to_hit = 70 + 2 * (self.entity.fighter.dexterity - target.fighter.dexterity)
+        
+        dice = random.randint(1, 100)
+        
+        if dice > chance_to_hit:
+            self.engine.message_log.add_message(
+                f"You miss.", attack_color
+            )
+            return
+        
         damage = self.entity.fighter.power - target.fighter.defense
 
-        attack_desc = f"{self.entity.name.capitalize()} ataca {target.name}"
+        attack_desc = f"{self.entity.name.capitalize()} attacks {target.name}"
         
         if self.entity is self.engine.player:
             attack_color = color.player_atk
@@ -153,14 +164,18 @@ class MeleeAction(ActionWithDirection):
                 self.engine.player.skill_list.skills[2].add_xp(15)
             if target is self.engine.player:
                 self.engine.player.skill_list.skills[4].add_xp(15)
+            extra_damage_message = ""
+            if dice == 1:
+                damage = damage*2
+                extra_damage_message = " Critical!"
             self.engine.message_log.add_message(
-                f"{attack_desc} causando {damage} de dano.", attack_color
+                f"{attack_desc} for {damage} damage.{extra_damage_message}", attack_color
             )
             self.engine.player.skill_list.skills[2]
             target.fighter.hp -= damage
         else:
             self.engine.message_log.add_message(
-                f"{attack_desc} mas nao da dano.", attack_color
+                f"{attack_desc} for no damage.", attack_color
             )
 
 class EquipAction(Action):
@@ -178,10 +193,10 @@ class MovementAction(ActionWithDirection):
 
         if not self.engine.game_map.in_bounds(dest_x, dest_y):
             # Destination is out of bounds.
-            raise exceptions.Impossible("Esse caminho esta fora do mapa.")
+            raise exceptions.Impossible("You try to walk outside boundaries. Do you think I'm stupid?")
         if not self.engine.game_map.tiles["walkable"][dest_x, dest_y]:
             # Destination is blocked by a tile.
-            raise exceptions.Impossible("Esse caminho esta bloqueado por uma tile.")
+            raise exceptions.Impossible("You try to walk into a wall, so I won't count it as a turn, dumbass.")
         blocking_entity = self.engine.game_map.get_blocking_entity_at_location(dest_x, dest_y)
         if blocking_entity:
             if isinstance(blocking_entity, Chest):
@@ -190,15 +205,15 @@ class MovementAction(ActionWithDirection):
                     for item in blocking_entity.break_chest(self.engine.player):
                         item.spawn(self.engine.game_map, dest_x, dest_y)
                         item.parent = self.engine.game_map
-                    self.engine.message_log.add_message("Bau quebrado!")
+                    self.engine.message_log.add_message("You broke the container!")
                     return  # Finaliza a ação após interagir com o baú
                 else:
                     for item in blocking_entity.open(self.engine.player):
                         item.spawn(self.engine.game_map, dest_x, dest_y)
                         item.parent = self.engine.game_map
-                    self.engine.message_log.add_message("Bau aberto!")
+                    self.engine.message_log.add_message("You opened the container!")
                     return  # Finaliza a ação após interagir com o baú
-            raise exceptions.Impossible("Esse caminho esta bloqueado por uma Entity.")
+            raise exceptions.Impossible("Blocked by an entity. Spooky!")
 
         self.entity.move(self.dx, self.dy)
 

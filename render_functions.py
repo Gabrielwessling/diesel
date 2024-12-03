@@ -48,7 +48,7 @@ def render_bar(
         )
 
     console.print(
-        x=1, y=32, string=f"VIDA: {current_value}/{maximum_value}", fg=color.bar_text
+        x=1, y=32, string=f"HP: {current_value}/{maximum_value}", fg=color.bar_text
     )
 
 def render_dungeon_level(
@@ -59,4 +59,4 @@ def render_dungeon_level(
     """
     x, y = location
 
-    console.print(x=x, y=y, string=f"Andar: -{dungeon_level}")
+    console.print(x=x, y=y, string=f"Floor: {(dungeon_level*-1)+1}")
