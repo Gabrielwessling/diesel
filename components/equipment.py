@@ -46,8 +46,16 @@ class Equipment(BaseComponent):
     def range(self) -> int:
         bonus = 0
         for slot, item in self.slots.items():
-            if item and item.equippable:
+            if item and item.equippable and item.equippable.equipment_type is EquipmentType.HANDS:
                 bonus += item.equippable.range
+        return bonus
+    
+    @property
+    def dexterity_bonus(self) -> int:
+        bonus = 0
+        for slot, item in self.slots.items():
+            if item and item.equippable:
+                bonus += item.equippable.dexterity_bonus
         return bonus
 
     def item_is_equipped(self, item: Item) -> bool:

@@ -190,7 +190,7 @@ class Chest(Entity):
         y: int = 0,
         char: str = "C",  # Representação do baú no mapa.
         color: Tuple[int, int, int] = (139, 69, 19),  # Marrom, cor típica de baús.
-        name: str = "Caixa",
+        name: str = "Container",
         locked: bool = False,  # Indica se o baú está trancado.
         breakable: bool = False,  # Indica se o baú pode ser quebrado.
         chest_id: Optional[int] = None,  # ID necessário para baús trancados.
@@ -223,13 +223,13 @@ class Chest(Entity):
         """
         if self.locked:
             if not self._player_has_key(actor):
-                raise exceptions.Impossible(f"O(a) {self.name} precisa de chave.")
+                raise exceptions.Impossible(f"The {self.name} needs a key.")
         
         items = self.items
         self.items = []  # Esvazia o baú.
         self.blocks_movement = False  # O baú agora não bloqueia movimento.
         self.char = "%"
-        self.name = "Bau aberto"
+        self.name = "Open Container"
         self.color = (100, 100, 40)
         self.blocks_movement = False
         self.breakable = False
@@ -248,13 +248,13 @@ class Chest(Entity):
             List[Item]: Os itens no baú.
         """
         if not self.breakable:
-            raise exceptions.Impossible("Este container nao pode ser quebrado.")
+            raise exceptions.Impossible("This container can't be broken.")
         
         items = self.items
         self.items = []  # Esvazia o baú.
         self.blocks_movement = False  # O baú agora não bloqueia movimento.
         self.char = "%"
-        self.name = "Bau quebrado"
+        self.name = "Broken Container"
         self.color = (100, 100, 40)
         self.blocks_movement = False
         self.breakable = False

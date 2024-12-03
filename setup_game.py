@@ -54,7 +54,7 @@ def new_game() -> Engine:
     engine.update_fov()
 
     engine.message_log.add_message(
-        "Seja bem-vindo a porra do inferno, alguns vem por diesel, outros por trocados, mate todos!", color.welcome_text
+        "Welcome to hell, where some claw their way for diesel and others bleed for credits. Will you thrive or will you be used as fuel for the engines of violence?", color.welcome_text
     )
     return engine
 
@@ -83,14 +83,14 @@ class MainMenu(input_handlers.BaseEventHandler):
         console.print(
             console.width // 2,
             console.height - 2,
-            "feito pelo gabe",
+            "by Gabriel Wessling",
             fg=color.menu_title,
             alignment=libtcodpy.CENTER,
         )
 
         menu_width = 24
         for i, text in enumerate(
-            ["[N] Novo Jogo","[C] Carregar" , "[Q] Quitar"]
+            ["[N] New Game","[C] Continue" , "[Q] Quit"]
         ):
             console.print(
                 console.width // 2,

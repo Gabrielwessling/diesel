@@ -2,7 +2,7 @@
     "items": {
       "consumables": [
         {
-          "name": "Garrafa de 51",
+          "name": "Bottle of 51",
           "char": "!",
           "color": "255,0,100",
           "consumableClass": "HealingConsumable",
@@ -10,7 +10,7 @@
           "weight": 1.45
         },
         {
-          "name": "Pilha Estragada",
+          "name": "Broken Taser",
           "char": "}",
           "color": "200,200,0",
           "consumableClass": "LightningDamageConsumable",
@@ -19,7 +19,7 @@
           "weight": 0.07
         },
         {
-          "name": "Lancador de Crack",
+          "name": "Crack Injection Launcher",
           "char": "=",
           "color": "207,63,255",
           "consumableClass": "ConfusionConsumable",
@@ -27,7 +27,7 @@
           "weight": 1.34
         },
         {
-          "name": "Coquetel Molotov",
+          "name": "Molotov",
           "char": "~",
           "color": "255,0,0",
           "consumableClass": "FireballDamageConsumable",
@@ -38,260 +38,260 @@
       ],
       "equipables": [
         {
-          "name": "Faca Sem Fio",
+          "name": "Dull Knife",
           "char": "►",
           "color": "70,70,70",
           "equippableClass": "Dagger",
           "weight": 0.15
         },
         {
-          "name": "Espada Fundo de Garagem",
+          "name": "Garage-Crafted Sword",
           "char": "►",
           "color": "215,200,150",
           "equippableClass": "Sword",
           "weight": 0.4
         },
         {
-          "name": "Porrete Ex-Policial",
+          "name": "Ex-Cop Baton",
           "char": "♠",
           "color": "15,15,55",
           "equippableClass": "Hammer",
           "weight": 0.5
         },
         {
-          "name": "Espeta Otario",
+          "name": "Brit Spear",
           "char": "|",
           "color": "255,50,200",
           "equippableClass": "Spear",
           "weight": 0.7
         },
         {
-          "name": "Machado 'Diassis'",
+          "name": "'Diassis' Axe",
           "char": "*",
           "color": "255,70,80",
           "equippableClass": "Axe",
           "weight": 0.4
         },
         {
-          "name": "Pedra",
+          "name": "Rock",
           "char": "o",
           "color": "30,30,55",
           "equippableClass": "Throwable",
-          "weight": 0.15
+          "weight": 0.3
         },
         {
-          "name": "Apenas Arco",
+          "name": "Jus Bow",
           "char": "/",
           "color": "0,200,100",
           "equippableClass": "Bow",
           "weight": 0.3
         },
         {
-          "name": "Pistola Mugger-73",
+          "name": "Mugger-73 Pistol",
           "char": "_",
           "color": "150,50,150",
           "equippableClass": "Pistol",
           "weight": 0.4
         },
         {
-          "name": "Rifle AK-37",
+          "name": "AK-37 Rifle",
           "char": "_",
           "color": "92,53,5",
           "equippableClass": "Rifle",
           "weight": 0.7
         },
         {
-          "name": "Lançador de Pedras",
+          "name": "Rock Launcher",
           "char": "_",
           "color": "5,47,82",
           "equippableClass": "Launcher",
           "weight": 1.0
         },
         {
-          "name": "Camiseta do Linkin Park",
+          "name": "Linkin Park Shirt",
           "char": "&",
           "color": "26,82,21",
           "equippableClass": "Shirt",
           "weight": 0.3
         },
         {
-          "name": "Trapos de Couro",
+          "name": "Leather Straps",
           "char": "&",
           "color": "41,27,20",
           "equippableClass": "Light_Body_Armor",
           "weight": 0.8
         },
         {
-          "name": "Armadura de Latinhas",
+          "name": "Tin Can Armor",
           "char": "&",
           "color": "72,46,74",
           "equippableClass": "Medium_Body_Armor",
           "weight": 1.2
         },
         {
-          "name": "Armadura de Placas de Transito",
+          "name": "Metal Sign Armor",
           "char": "&",
           "color": "99,17,43",
           "equippableClass": "Heavy_Body_Armor",
           "weight": 6.8
         },
         {
-          "name": "Bracadeira",
+          "name": "Arm-band",
           "char": ")",
           "color": "120,5,18",
           "equippableClass": "Arm_Band",
           "weight": 0.1
         },
         {
-          "name": "Bracadeira de Couro",
+          "name": "Leather Arms Armor",
           "char": ")",
           "color": "87,56,15",
           "equippableClass": "Light_Arm_Armor",
           "weight": 0.2
         },
         {
-          "name": "Bracadeira de Latinhas",
+          "name": "Tin Can Arms Armor",
           "char": ")",
           "color": "48,59,61",
           "equippableClass": "Medium_Arm_Armor",
           "weight": 0.4
         },
         {
-          "name": "Bracadeira de Metal Pesado",
+          "name": "Heavy Metal Arms Armor",
           "char": ")",
           "color": "18,14,13",
           "equippableClass": "Heavy_Arm_Armor",
           "weight": 0.8
         },
         {
-          "name": "Sapatoes Leves",
-          "char": "N",
+          "name": "Light Sabatons",
+          "char": "¨",
           "color": "50,50,50",
           "equippableClass": "Light_Sabatons",
           "weight": 1.0
         },
         {
-          "name": "Sapatoes Ponta de Ferro",
-          "char": "N",
+          "name": "Metal Tip Boot",
+          "char": "¨",
           "color": "70,70,70",
           "equippableClass": "Medium_Sabatons",
           "weight": 1.5
         },
         {
-          "name": "Sapatoes de Batalha",
-          "char": "N",
+          "name": "War Booties",
+          "char": "¨",
           "color": "90,90,90",
           "equippableClass": "Heavy_Sabatons",
           "weight": 2.0
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Gloves",
+          "char": "•",
           "color": "30,30,30",
           "equippableClass": "Gloves",
           "weight": 0.5
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Hand Hand-Made Armor",
+          "char": "•",
           "color": "60,60,60",
           "equippableClass": "Light_Glove_Armor",
           "weight": 0.6
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Can Seal Chainmail Glove",
+          "char": "•",
           "color": "90,90,90",
           "equippableClass": "Medium_Glove_Armor",
           "weight": 0.8
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Bruteforce Cyberglove 2000",
+          "char": "•",
           "color": "120,120,120",
           "equippableClass": "Heavy_Glove_Armor",
           "weight": 1.0
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Old World Blue Jeans",
+          "char": "§",
           "color": "40,40,40",
           "equippableClass": "Light_Leg_Armor",
           "weight": 1.2
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Two 1m Aluminum Tubes",
+          "char": "§",
           "color": "80,80,80",
           "equippableClass": "Medium_Leg_Armor",
           "weight": 1.5
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Metallic Golden Leg Iron",
+          "char": "§",
           "color": "120,120,120",
           "equippableClass": "Heavy_Leg_Armor",
           "weight": 2.0
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Default Cap",
+          "char": "◄",
           "color": "100,100,100",
           "equippableClass": "Light_Helmet",
           "weight": 0.8
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Medieval Football Helmet",
+          "char": "◄",
           "color": "150,150,150",
           "equippableClass": "Medium_Helmet",
           "weight": 1.2
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Solid Inox Fantasy Mage Hat",
+          "char": "◄",
           "color": "200,200,200",
           "equippableClass": "Heavy_Helmet",
           "weight": 1.5
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Confortable Shoulder Pads",
+          "char": "e",
           "color": "80,80,80",
           "equippableClass": "Light_Shoulder_Pads",
           "weight": 0.6
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Hard Rock Shoulder Pads",
+          "char": "e",
           "color": "120,120,120",
           "equippableClass": "Medium_Shoulder_Pads",
           "weight": 1.0
         },
         {
-          "name": "NEED_NAME",
-          "char": "N",
+          "name": "Hungarian Fine Steel Shoulder Pads 4",
+          "char": "e",
           "color": "160,160,160",
           "equippableClass": "Heavy_Shoulder_Pads",
           "weight": 1.5
         },
         {
-        "name": "NEED_NAME",
-        "char": "N",
+        "name": "Ring",
+        "char": "♂",
         "color": "255,255,255",
         "equippableClass": "Ring",
         "weight": 0.1
         },
         {
-        "name": "NEED_NAME",
-        "char": "N",
+        "name": "Necklace",
+        "char": "♂",
         "color": "255,200,200",
         "equippableClass": "Necklace",
         "weight": 0.2
         },
         {
-        "name": "NEED_NAME",
-        "char": "N",
+        "name": "Tabard",
+        "char": "♂",
         "color": "100,100,255",
         "equippableClass": "Tabard",
         "weight": 0.4
