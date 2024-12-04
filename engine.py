@@ -7,6 +7,7 @@ import pickle
 import aiofiles  # For asynchronous file handling
 from tcod.console import Console
 from tcod.map import compute_fov
+import tcod
 
 import exceptions
 from game_map import GameMap
@@ -52,7 +53,10 @@ class Engine:
 
     def render(self, console: Console) -> None:
         if hasattr(self, "game_map"):
-            self.game_map.render(console)
+            offset_x = self.player.x - console.width // 2
+            offset_y = self.player.y - console.height // 2
+            # Renderiza o mapa ajustando os offsets.
+            self.game_map.render(console, offset_x, offset_y)
 
         self.message_log.render(console=console, x=17, y=31, width=41, height=4)
 
@@ -64,7 +68,7 @@ class Engine:
         )
 
         render_functions.render_names_at_mouse_location(console=console, x=0, y=0, engine=self)
-        render_functions.render_dungeon_level(
+        render_functions.render_dungeon_level_indicator(
             console=console,
             dungeon_level=self.game_world.current_floor,
             location=(0, 1),

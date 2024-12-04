@@ -48,32 +48,52 @@ class RectangularRoom:
         )
 
 def place_entities(
-    room: RectangularRoom, dungeon: GameMap, maximum_monsters: int, maximum_items: int, maximum_chests:int, entity_factories:EntityFactories,
+    room: RectangularRoom, dungeon: GameMap, maximum_monsters: int, maximum_items: int, maximum_chests: int, entity_factories: EntityFactories, monsters_with_chance: Actor[List]
 ) -> None:
+    # Agora, decidimos quantos monstros serão gerados, aleatoriamente, até o máximo
     number_of_monsters = random.randint(0, maximum_monsters)
     number_of_items = random.randint(0, maximum_items)
-    number_of_chests = random.randint(0,maximum_chests)
+    number_of_chests = random.randint(0, maximum_chests)
 
-    for i in range(number_of_monsters):
+    # Lista para armazenar os monstros escolhidos para spawn
+    chosen_monsters = []
+
+    # Escolher monstros com base na chance
+    for monster, spawn_chance, _ in monsters_with_chance:
+        if random.random() < spawn_chance and len(chosen_monsters) < number_of_monsters:
+            chosen_monsters.append(monster)
+
+    # Colocando os monstros escolhidos no mapa
+    for entity in chosen_monsters:
         x = random.randint(room.x1 + 1, room.x2 - 1)
         y = random.randint(room.y1 + 1, room.y2 - 1)
 
-        if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
-            dice = random.randint(0, (len(entity_factories.monsters) - 1))
-            entity: Actor = entity_factories.monsters[dice]
+        if not any(existing_entity.x == x and existing_entity.y == y for existing_entity in dungeon.entities):
             entity.parent = dungeon
             entity.spawn(dungeon, x, y)
 
+    # Colocando itens no mapa
     for i in range(number_of_items):
         x = random.randint(room.x1 + 1, room.x2 - 1)
         y = random.randint(room.y1 + 1, room.y2 - 1)
 
         if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
-            dice = random.randint(0, (len(entity_factories.items) - 1))
+            dice = random.randint(0, len(entity_factories.items) - 1)
             entity: Item = entity_factories.items[dice]
             entity.parent = dungeon
             entity.spawn(dungeon, x, y)
 
+    # Colocando baús no mapa
+    for i in range(number_of_chests):
+        x = random.randint(room.x1 + 1, room.x2 - 1)
+        y = random.randint(room.y1 + 1, room.y2 - 1)
+
+        if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
+            dice = random.randint(0, 100)
+            if dice >= 90:
+                entity: Chest = entity_factories.chests[0]
+                entity.parent = dungeon
+                entity.spawn(dungeon, x, y)
 
 def tunnel_between(
     start: Tuple[int, int], end: Tuple[int, int]
@@ -131,6 +151,7 @@ def generate_dungeon(
     level_chest: Chest
     level_chest = entity_factories.chests[0].spawn(dungeon, center_of_last_room[0] + 2, center_of_last_room[1] + 2)
 
+    # Gerar as salas e conectar com túneis
     for r in range(max_rooms):
         room_width = random.randint(room_min_size, room_max_size)
         room_height = random.randint(room_min_size, room_max_size)
@@ -141,67 +162,88 @@ def generate_dungeon(
         # "RectangularRoom" class makes rectangles easier to work with
         new_room = RectangularRoom(x, y, room_width, room_height, engine)
 
-        # Run through the other rooms and see if they intersect with this one.
+        # Verificar se há sobreposição entre salas
         if any(new_room.intersects(other_room) for other_room in rooms):
-            continue  # This room intersects, so go to the next attempt.
-        # If there are no intersections then the room is valid.
+            continue  # Esta sala intersecta, então tente novamente
 
-        # Dig out this rooms inner area.
+        # Cavando o piso da sala
         dungeon.tiles[new_room.inner] = tile_types.floor_grass
 
+        # Modificar tiles de piso nas outras salas
         for room in rooms:
             modify_floor_tiles(dungeon)
     
         center_of_last_room = new_room.center
 
         if len(rooms) == 0:
-            # The first room, where the player starts.
+            # A primeira sala, onde o jogador começa
             player.place(*new_room.center, dungeon)
-        else:  # All rooms after the first.
-            # Dig out a tunnel between this room and the previous one.
+        else:
+            # Cavando um túnel entre esta sala e a anterior
             for x, y in tunnel_between(rooms[-1].center, new_room.center):
                 dungeon.tiles[x, y] = tile_types.floor_grass
 
-        if len(rooms) != 0:
-            place_entities(new_room, dungeon, max_monsters_per_room, max_items_per_room, max_chests_per_room, entity_factories)
-
-        dungeon.tiles[center_of_last_room] = tile_types.down_stairs
-        dungeon.downstairs_location = center_of_last_room
-
-        level_chest.x = center_of_last_room[0] + 2
-        level_chest.y = center_of_last_room[1] + 2
-
-        # Finally, append the new room to the list.
+        # Adicionando a sala à lista
         rooms.append(new_room)
-        dice_locked = random.randint(1, 100)
 
+    # Agora que a dungeon está gerada, podemos gerar as entidades
+    monsters_with_chance = []
+
+    # Primeiro, calculamos o poder de cada monstro e sua chance de spawn
+    for monster in entity_factories.monsters:
+        monster: Actor
+        monster_power = monster.fighter.power + monster.fighter.defense + int(monster.fighter.hp / 2)
+
+        # Calculando a chance de spawn: a menor chance deve ser para monstros com maior poder
+        spawn_chance = 200 / (monster_power + 0.01)  # A chance vai diminuir conforme o poder aumenta (evitar divisão por zero)
+        print(f"Monster: {monster.name}\tSpawn Chance: {spawn_chance}")
+        
+        # Armazenando a informação de poder e a chance
+        monsters_with_chance.append((monster, spawn_chance, monster_power))
+
+    # Ordena os monstros pela chance de spawn (menor chance para maior poder)
+    monsters_with_chance.sort(key=lambda x: x[1], reverse=True)
+
+    # Coloca as entidades no mapa, uma por uma
+    for room in rooms:
+        place_entities(room, dungeon, max_monsters_per_room, max_items_per_room, max_chests_per_room, entity_factories, monsters_with_chance)
+
+    dungeon.tiles[center_of_last_room] = tile_types.down_stairs
+    dungeon.downstairs_location = center_of_last_room
+
+    level_chest.x = center_of_last_room[0] + 2
+    level_chest.y = center_of_last_room[1] + 2
+
+    dice_locked = random.randint(1, 100)
+
+    # Configura o baú
     if dice_locked >= 80:
         level_chest.breakable = False
         level_chest.locked = True
         level_chest.chest_id = random.randint(1, 100)
         open_tiles = dungeon.get_locations_of_tile(tile_types.floor_grass)
-        if open_tiles:  # Certifique-se de que há localizações disponíveis
-            # Escolha uma localização aleatória
+        if open_tiles:
             chosen_location = random.choice(open_tiles)
             
-            # Posicione o item na localização escolhida
+            # Posiciona o item na localização escolhida
             key_chest: Item = entity_factories.key_items[0].spawn(
                 dungeon,
-                x=chosen_location[0],  # Coordenada X
-                y=chosen_location[1]   # Coordenada Y
+                x=chosen_location[0],
+                y=chosen_location[1]
             )
             key_chest.key_id = level_chest.chest_id
     else:
         level_chest.locked = False
         level_chest.breakable = True
 
+    # Adiciona itens ao baú
     if level_chest.locked: 
         number_of_items = random.randint(3, 6) 
     else:
         number_of_items = random.randint(1, 5)
 
     for _ in range(number_of_items):
-        chosen_item = random.choice(entity_factories.items)  # Escolhe um item aleatório.
-        level_chest.items.append(chosen_item)  # Adiciona ao baú.]
+        chosen_item = random.choice(entity_factories.items)
+        level_chest.items.append(chosen_item)
     
     return dungeon

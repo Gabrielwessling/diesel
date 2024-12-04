@@ -71,27 +71,53 @@ class GameMap:
         """Return True if x and y are inside of the bounds of this map."""
         return 0 <= x < self.width and 0 <= y < self.height
 
-    def render(self, console: Console) -> None:
+    def render(self, console: Console, offset_x: int = 0, offset_y: int = 0) -> None:
         """
-        Renders the map.
-
-        If a tile is in the "visible" array, then draw it with the "light" colors.
-        If it isn't, but it's in the "explored" array, then draw it with the "dark" colors.
-        Otherwise, the default is "SHROUD".
+        Renderiza o mapa, preenchendo áreas fora das tiles com SHROUD.
         """
-        console.rgb[0 : self.width, 0 : self.height] = np.select(
-            condlist=[self.visible, self.explored],
-            choicelist=[self.tiles["light"], self.tiles["dark"]],
-            default=tile_types.SHROUD,
-        )
+        # Preenche todo o console com SHROUD antes de renderizar
+        console.rgb[:, :] = tile_types.SHROUD
 
-        entities_sorted_for_rendering = sorted(
-            (entity for entity in self.entities if self.visible[entity.x, entity.y]),
-            key=lambda x: x.render_order.value,
-        )
-        for entity in entities_sorted_for_rendering:
-            console.print(x=entity.x, y=entity.y, string=entity.char, fg=entity.color)
+        # Define os limites do console
+        console_width, console_height = console.width, console.height
 
+        # Itera sobre cada posição do console
+        for x in range(console_width):
+            for y in range(console_height):
+                # Calcula a posição no mapa correspondente ao console (ajustada pelo offset)
+                map_x = x + offset_x
+                map_y = y + offset_y
+
+                # Verifica se a posição está dentro dos limites do mapa
+                if 0 <= map_x < self.width and 0 <= map_y < self.height:
+                    if self.visible[map_x, map_y]:
+                        tile = self.tiles["light"][map_x, map_y]
+                    elif self.explored[map_x, map_y]:
+                        tile = self.tiles["dark"][map_x, map_y]
+                    else:
+                        tile = tile_types.SHROUD
+
+                    # Atualiza a posição do console com o tile correspondente
+                    console.rgb[x, y] = tile
+
+        # Ordena as entidades com base no render_order
+        sorted_entities = sorted(self.entities, key=lambda entity: entity.render_order.value)
+
+        # Renderiza as entidades ordenadas
+        for entity in sorted_entities:
+            # Verifica se a entidade está dentro dos limites do mapa e visível
+            if 0 <= entity.x < self.width and 0 <= entity.y < self.height and self.visible[entity.x, entity.y]:
+                draw_x = entity.x - offset_x
+                draw_y = entity.y - offset_y
+
+                # Renderiza apenas se a entidade estiver dentro do console
+                if 0 <= draw_x < console.width and 0 <= draw_y < console.height:
+                    console.print(
+                        x=draw_x,
+                        y=draw_y,
+                        string=entity.char,
+                        fg=entity.color,
+                    )
 
 class GameWorld:
     """
