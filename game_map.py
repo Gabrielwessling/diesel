@@ -16,7 +16,7 @@ class GameMap:
     def __init__(
         self, engine: Engine, width: int, height: int, entities: Iterable[Entity] = ()
     ):
-        print (f" - Initializing GameMap...")
+        print (f"\n - Initializing GameMap...")
         self.engine = engine
         self.width, self.height = width, height
         self.entities = set(entities)
@@ -35,18 +35,15 @@ class GameMap:
     @property
     def actors(self) -> Iterator[ENT.Actor]:
         """Iterate over this map's living actors."""
-        print (f" - Iterating over living ACTORS inside map...")
         yield from (entity for entity in self.entities if isinstance(entity, ENT.Actor) and entity.is_alive)
 
     @property
     def items(self) -> Iterator[ENT.Item]:
         """Iterate over items on this map."""
-        print (f" - Iterating over ITEMS inside map...")
         yield from (entity for entity in self.entities if isinstance(entity, ENT.Item))
 
     def get_blocking_entity_at_location(self, x: int, y: int) -> Optional[Entity]:
         """Get a blocking entity at a location."""
-        print (f" - Getting blocking ENTITY at location x:{x} y:{y}...")
         return next(
             (entity for entity in self.entities if entity.blocks_movement and entity.x == x and entity.y == y),
             None,
@@ -54,7 +51,6 @@ class GameMap:
 
     def get_actor_at_location(self, x: int, y: int) -> Optional[Actor]:
         """Get an actor at a specific location."""
-        print (f" - Getting ACTOR at location x:{x} y:{y}...")
         return next((actor for actor in self.actors if actor.x == x and actor.y == y), None)
 
     def get_locations_of_tile(self, tile_type) -> list[tuple[int, int]]:
@@ -63,8 +59,6 @@ class GameMap:
         """
         print (f" - Getting list of all locations in the map that have {tile_type} tiles...")
         LIST = [tuple(loc) for loc in np.argwhere(self.tiles == tile_type)]
-        for i in range(len(LIST)):
-            print (f" - x:{LIST[i][0]} y:{LIST[i][1]} ...")
         return LIST
 
     def in_bounds(self, x: int, y: int) -> bool:
@@ -173,4 +167,5 @@ class GameWorld:
             max_items_per_room=self.max_items_per_room,
             max_chests_per_room=1,
             engine=self.engine,
+            current_floor=self.current_floor,  # Passar o andar atual
         )

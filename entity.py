@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from components.equippable import Equippable
     from components.equipment import Equipment
     from components.fighter import Fighter
+    from components.spawn_curve import SpawnCurve
     from components.inventory import Inventory
     from components.skill_list import SkillList
 
@@ -103,8 +104,11 @@ class Actor(Entity):
         ai_cls: Type[BaseAI],
         equipment: Equipment,
         fighter: Fighter,
+        spawn_curve: SpawnCurve,
         inventory: Inventory,
         skill_list: SkillList,
+        min_floor: int = 0,  # Andar mínimo para spawn
+        max_floor: int = float("inf"),  # Andar máximo para spawn
         parent: Optional[GameMap] = None,
     ):
         # Inicializa a classe pai Entity, mas sem atribuir o gamemap
@@ -134,12 +138,15 @@ class Actor(Entity):
         self.skill_list = skill_list
         self.skill_list.parent = self
 
-        
+        # Limites de andares para spawn
+        self.min_floor = min_floor
+        self.max_floor = max_floor
 
     @property
     def is_alive(self) -> bool:
         """Retorna True enquanto esse ator pode realizar ações."""
         return bool(self.ai)
+
     @property
     def hasnt_won(self) -> bool:
         monsters = []

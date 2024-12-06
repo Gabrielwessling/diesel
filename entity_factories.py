@@ -32,7 +32,7 @@ class EntityFactories:
         
         # Initialize Key Items and add to the key_items list
         self.key = Item(
-            char="µ",
+            char="♦",
             color=(100, 100, 100),
             name="Key",
             weight=0.01,
@@ -86,6 +86,8 @@ class EntityFactories:
                 inventory=Inventory(capacity=enemy_data["inventory"]["capacity"], 
                                      max_weight=enemy_data["inventory"]["max_weight"]),
                 skill_list=SkillList(parent=gamemap, engine=engine),
+                min_floor=enemy_data["min_floor"],
+                max_floor=enemy_data["max_floor"],
             )
             self.monsters.append(monster)
         
