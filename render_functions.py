@@ -25,13 +25,25 @@ def render_names_at_mouse_location(
 ) -> None:
     if not hasattr(engine, "game_map"):
         return
-    mouse_x, mouse_y = engine.mouse_location
 
+    # Ajustar as coordenadas do mouse para levar em conta o offset
+    mouse_x, mouse_y = engine.mouse_location
+    map_mouse_x = mouse_x + (engine.player.x - console.width // 2)
+    map_mouse_y = mouse_y + (engine.player.y - console.height // 2)
+
+    # Verificar se as coordenadas ajustadas estão dentro do mapa
+    if not engine.game_map.in_bounds(map_mouse_x, map_mouse_y):
+        return
+
+    # Obter os nomes na localização ajustada
     names_at_mouse_location = get_names_at_location(
-        x=mouse_x, y=mouse_y, game_map=engine.game_map
+        x=map_mouse_x, y=map_mouse_y, game_map=engine.game_map
     )
 
-    console.print(x=x, y=y, bg=color.black, string=names_at_mouse_location)
+    # Exibir o nome no console
+    if names_at_mouse_location:
+        console.print(x=x, y=y, bg=color.black, string=names_at_mouse_location)
+
     
 def render_bar(
     console: tcod.console.Console,
