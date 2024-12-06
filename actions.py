@@ -106,11 +106,7 @@ class TakeStairsAction(Action):
                 "You descend the stairs.", color.descend
             )
         else:
-            self.engine.game_world.generate_floor()
-            self.engine.message_log.add_message(
-                "You descend the stairs.", color.descend
-            )
-            #raise exceptions.Impossible("You can't descend into matter.")
+            raise exceptions.Impossible("You can't descend into matter.")
 
 class ActionWithDirection(Action):
     def __init__(self, entity: Actor, dx: int, dy: int):

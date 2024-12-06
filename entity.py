@@ -104,11 +104,9 @@ class Actor(Entity):
         ai_cls: Type[BaseAI],
         equipment: Equipment,
         fighter: Fighter,
-        spawn_curve: SpawnCurve,
+        spawn_curve: Optional[SpawnCurve] = None,
         inventory: Inventory,
         skill_list: SkillList,
-        min_floor: int = 0,  # Andar mínimo para spawn
-        max_floor: int = float("inf"),  # Andar máximo para spawn
         parent: Optional[GameMap] = None,
     ):
         # Inicializa a classe pai Entity, mas sem atribuir o gamemap
@@ -128,6 +126,11 @@ class Actor(Entity):
 
         self.fighter = fighter
         self.fighter.parent = self
+        
+        #Initialize Spawn Curve
+        if spawn_curve:
+            self.spawn_curve = spawn_curve
+            self.spawn_curve.parent = self
 
         self.equipment: Equipment = equipment
         self.equipment.parent = self
@@ -137,10 +140,6 @@ class Actor(Entity):
 
         self.skill_list = skill_list
         self.skill_list.parent = self
-
-        # Limites de andares para spawn
-        self.min_floor = min_floor
-        self.max_floor = max_floor
 
     @property
     def is_alive(self) -> bool:

@@ -1,72 +1,6 @@
 {
   "enemies": [
     {
-      "char": "v", 
-      "color": "127,63,63", 
-      "name": "Vagabond", 
-      "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 10, "base_defense": 1, "base_power": 1 }, 
-      "inventory": { "capacity": 26, "max_weight": 55 }, 
-      "equipment": {}, 
-      "skill_list": {}, 
-      "min_prob": 0.1, "peak_prob": 1.0, "start_floor": 1, "peak_floor": 4, "end_floor": 7
-    },
-    {
-      "char": "A", 
-      "color": "200,50,50", 
-      "name": "MotorMan Assalt 2", 
-      "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 12, "base_defense": 1, "base_power": 3 }, 
-      "inventory": { "capacity": 30, "max_weight": 60 }, 
-      "equipment": {}, 
-      "skill_list": {}, 
-      "min_prob": 0.1, "peak_prob": 0.8, "start_floor": 1, "peak_floor": 3, "end_floor": 8
-    },
-    {
-      "char": "p", 
-      "color": "50,200,50", 
-      "name": "Combat Pilot", 
-      "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 13, "base_defense": 2, "base_power": 2 }, 
-      "inventory": { "capacity": 20, "max_weight": 50 }, 
-      "equipment": {}, 
-      "skill_list": {}, 
-      "min_prob": 0.0, "peak_prob": 0.6, "start_floor": 1, "peak_floor": 4, "end_floor": 9
-    },
-    {
-      "char": "z", 
-      "color": "255,255,0", 
-      "name": "Rad Zed", 
-      "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 40, "base_defense": -2, "base_power": 3 }, 
-      "inventory": { "capacity": 35, "max_weight": 70 }, 
-      "equipment": {}, 
-      "skill_list": {}, 
-      "min_prob": 0.1, "peak_prob": 0.9, "start_floor": 3, "peak_floor": 5, "end_floor": 10
-    },
-    {
-      "char": "j", 
-      "color": "100,100,255", 
-      "name": "Jimmy Robber", 
-      "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 10, "base_defense": 2, "base_power": 3 }, 
-      "inventory": { "capacity": 28, "max_weight": 65 }, 
-      "equipment": {}, 
-      "skill_list": {}, 
-      "min_prob": 0.1, "peak_prob": 0.7, "start_floor": 1, "peak_floor": 4, "end_floor": 10
-    },
-    {
-      "char": "M", 
-      "color": "255,100,100", 
-      "name": "Mercenary", 
-      "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 20, "base_defense": 1, "base_power": 6 }, 
-      "inventory": { "capacity": 25, "max_weight": 60 }, 
-      "equipment": {}, 
-      "skill_list": {}, 
-      "min_prob": 0.1, "peak_prob": 0.8, "start_floor": 3, "peak_floor": 5, "end_floor": 10
-    },
-    {
       "char": "D", 
       "color": "200,50,200", 
       "name": "Diesel Thief", 
@@ -75,40 +9,18 @@
       "inventory": { "capacity": 30, "max_weight": 55 }, 
       "equipment": {}, 
       "skill_list": {}, 
-      "min_prob": 0.0, "peak_prob": 0.5, "start_floor": 0, "peak_floor": 1, "end_floor": 3
+      "min_prob": 0, "peak_prob": 4, "start_floor": 0, "peak_floor": 1, "end_floor": 3
     },
     {
-      "char": "R", 
-      "color": "180,180,50", 
-      "name": "RobotCop", 
+      "char": "v", 
+      "color": "127,63,63", 
+      "name": "Vagabond", 
       "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 100, "base_defense": 7, "base_power": 7 }, 
-      "inventory": { "capacity": 40, "max_weight": 75 }, 
+      "fighter": { "hp": 10, "base_defense": 1, "base_power": 1 }, 
+      "inventory": { "capacity": 26, "max_weight": 55 }, 
       "equipment": {}, 
       "skill_list": {}, 
-      "min_prob": 0.0, "peak_prob": 0.7, "start_floor": 5, "peak_floor": 6, "end_floor": 10
-    },
-    {
-      "char": "B", 
-      "color": "50,255,255", 
-      "name": "Metal Band Member", 
-      "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 12, "base_defense": -1, "base_power": 5 }, 
-      "inventory": { "capacity": 20, "max_weight": 50 }, 
-      "equipment": {}, 
-      "skill_list": {}, 
-      "min_prob": 0.1, "peak_prob": 0.8, "start_floor": 3, "peak_floor": 5, "end_floor": 8
-    },
-    {
-      "char": "s", 
-      "color": "255,0,255", 
-      "name": "Tech-Priest IKEA Manager", 
-      "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 14, "base_defense": 1, "base_power": 15 }, 
-      "inventory": { "capacity": 25, "max_weight": 60 }, 
-      "equipment": {}, 
-      "skill_list": {}, 
-      "min_prob": 0.2, "peak_prob": 0.9, "start_floor": 4, "peak_floor": 6, "end_floor": 10
+      "min_prob": 0, "peak_prob": 6, "start_floor": 0, "peak_floor": 2, "end_floor": 3
     },
     {
       "char": "w", 
@@ -119,29 +31,73 @@
       "inventory": { "capacity": 28, "max_weight": 65 }, 
       "equipment": {}, 
       "skill_list": {}, 
-      "min_prob": 0.0, "peak_prob": 0.8, "start_floor": 3, "peak_floor": 6, "end_floor": 10
+      "min_prob": 0, "peak_prob": 5, "start_floor": 2, "peak_floor": 4, "end_floor": 5
     },
     {
-      "char": "c", 
-      "color": "50,50,200", 
-      "name": "Untouchable Soldier", 
+      "char": "p", 
+      "color": "50,200,50", 
+      "name": "Combat Pilot", 
       "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 1, "base_defense": 15, "base_power": 6 }, 
-      "inventory": { "capacity": 35, "max_weight": 80 }, 
+      "fighter": { "hp": 13, "base_defense": 2, "base_power": 2 }, 
+      "inventory": { "capacity": 20, "max_weight": 50 }, 
       "equipment": {}, 
       "skill_list": {}, 
-      "min_prob": 0.0, "peak_prob": 1.0, "start_floor": 5, "peak_floor": 7, "end_floor": 10
+      "min_prob": 0, "peak_prob": 3, "start_floor": 2, "peak_floor": 5, "end_floor": 6
     },
     {
-      "char": "h", 
-      "color": "255,255,150", 
-      "name": "Steel Hunter", 
+      "char": "j", 
+      "color": "100,100,255", 
+      "name": "Jimmy Robber", 
       "ai_cls": "HostileEnemy", 
-      "fighter": { "hp": 22, "base_defense": 3, "base_power": 5 }, 
-      "inventory": { "capacity": 30, "max_weight": 70 }, 
+      "fighter": { "hp": 10, "base_defense": 2, "base_power": 3 }, 
+      "inventory": { "capacity": 28, "max_weight": 65 }, 
       "equipment": {}, 
       "skill_list": {}, 
-      "min_prob": 0.1, "peak_prob": 0.7, "start_floor": 3, "peak_floor": 5, "end_floor": 9
+      "min_prob": 0, "peak_prob": 5, "start_floor": 3, "peak_floor": 6, "end_floor": 7
+    },
+    {
+      "char": "A", 
+      "color": "200,50,50", 
+      "name": "MotorMan Assalt 2", 
+      "ai_cls": "HostileEnemy", 
+      "fighter": { "hp": 12, "base_defense": 1, "base_power": 3 }, 
+      "inventory": { "capacity": 30, "max_weight": 60 }, 
+      "equipment": {}, 
+      "skill_list": {}, 
+      "min_prob": 0, "peak_prob": 5, "start_floor": 3, "peak_floor": 7, "end_floor": 8
+    },
+    {
+      "char": "B", 
+      "color": "50,255,255", 
+      "name": "Metal Band Member", 
+      "ai_cls": "HostileEnemy", 
+      "fighter": { "hp": 12, "base_defense": -1, "base_power": 5 }, 
+      "inventory": { "capacity": 20, "max_weight": 50 }, 
+      "equipment": {}, 
+      "skill_list": {}, 
+      "min_prob": 0, "peak_prob": 6, "start_floor": 3, "peak_floor": 6, "end_floor": 8
+    },
+    {
+      "char": "z", 
+      "color": "255,255,0", 
+      "name": "Rad Zed", 
+      "ai_cls": "HostileEnemy", 
+      "fighter": { "hp": 40, "base_defense": -2, "base_power": 3 }, 
+      "inventory": { "capacity": 35, "max_weight": 70 }, 
+      "equipment": {}, 
+      "skill_list": {}, 
+      "min_prob": 0, "peak_prob": 11, "start_floor": 4, "peak_floor": 6, "end_floor": 13
+    },
+    {
+      "char": "M", 
+      "color": "255,100,100", 
+      "name": "Mercenary", 
+      "ai_cls": "HostileEnemy", 
+      "fighter": { "hp": 20, "base_defense": 1, "base_power": 6 }, 
+      "inventory": { "capacity": 25, "max_weight": 60 }, 
+      "equipment": {}, 
+      "skill_list": {}, 
+      "min_prob": 0, "peak_prob": 8, "start_floor": 4, "peak_floor": 6, "end_floor": 10
     },
     {
       "char": "d", 
@@ -152,7 +108,51 @@
       "inventory": { "capacity": 25, "max_weight": 60 }, 
       "equipment": {}, 
       "skill_list": {}, 
-      "min_prob": 0.1, "peak_prob": 0.6, "start_floor": 3, "peak_floor": 5, "end_floor": 9
+      "min_prob": 0, "peak_prob": 6, "start_floor": 4, "peak_floor": 7, "end_floor": 10
+    },
+    {
+      "char": "c", 
+      "color": "50,50,200", 
+      "name": "Untouchable Soldier", 
+      "ai_cls": "HostileEnemy", 
+      "fighter": { "hp": 1, "base_defense": 15, "base_power": 6 }, 
+      "inventory": { "capacity": 35, "max_weight": 80 }, 
+      "equipment": {}, 
+      "skill_list": {}, 
+      "min_prob": 0, "peak_prob": 3, "start_floor": 5, "peak_floor": 7, "end_floor": 10
+    },
+    {
+      "char": "s", 
+      "color": "255,0,255", 
+      "name": "Tech-Priest IKEA Manager", 
+      "ai_cls": "HostileEnemy", 
+      "fighter": { "hp": 14, "base_defense": 1, "base_power": 15 }, 
+      "inventory": { "capacity": 25, "max_weight": 60 }, 
+      "equipment": {}, 
+      "skill_list": {}, 
+      "min_prob": 0, "peak_prob": 5, "start_floor": 5, "peak_floor": 8, "end_floor": 10
+    },
+    {
+      "char": "h", 
+      "color": "255,255,150", 
+      "name": "Steel Hunter", 
+      "ai_cls": "HostileEnemy", 
+      "fighter": { "hp": 22, "base_defense": 3, "base_power": 5 }, 
+      "inventory": { "capacity": 30, "max_weight": 70 }, 
+      "equipment": {}, 
+      "skill_list": {}, 
+      "min_prob": 0, "peak_prob": 3, "start_floor": 6, "peak_floor": 9, "end_floor": 11
+    },
+    {
+      "char": "R", 
+      "color": "180,180,50", 
+      "name": "RobotCop", 
+      "ai_cls": "HostileEnemy", 
+      "fighter": { "hp": 100, "base_defense": 7, "base_power": 7 }, 
+      "inventory": { "capacity": 40, "max_weight": 75 }, 
+      "equipment": {}, 
+      "skill_list": {}, 
+      "min_prob": 0, "peak_prob": 3, "start_floor": 8, "peak_floor": 10, "end_floor": 13
     }
   ]
 }

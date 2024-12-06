@@ -55,15 +55,9 @@ def place_entities(
     number_of_items = random.randint(0, maximum_items)
     number_of_chests = random.randint(0, maximum_chests)
 
-    # Normalizar chances para somarem 1.0
-    # total_chance = sum(monsters_with_chance.values())
-    # for monster in monsters_with_chance:
-    #     monsters_with_chance[monster] /= total_chance
-
-    # Seleção proporcional usando random.choices
     monster_list = list(monsters_with_chance.keys())
-    weights = list(monsters_with_chance.values())
-    chosen_monsters = random.choices(monster_list, weights=weights, k=number_of_monsters)
+    weight_list = list(monsters_with_chance.values())
+    chosen_monsters = random.choices(monster_list, weights=weight_list, k=number_of_monsters)
 
     # Debug: mostrar monstros escolhidos
     print(f"Chosen monsters: {[monster.name for monster in chosen_monsters]}")
@@ -187,32 +181,24 @@ def generate_dungeon(
 
     # Now that the dungeon is generated, we can generate the entities
     monsters_with_chance: Dict[Actor, float] = {}  # Now using a dictionary
-
-    total_power = sum(
-        monster.fighter.power + monster.fighter.defense + int(monster.fighter.hp / 2)
-        for monster in entity_factories.monsters
-    )
-    average_power = total_power / len(entity_factories.monsters)
-    
-    ##* Adjusted difficulty parameters
-    game_difficulty = 5 # multiplier of floor counter to have a level_difficulty
-    min_level_bias = 3  # Difficulty scaling factor, it cuts the level difficulty to have a min monster power treshold
-    
+ 
+    # define monsters as keys and their chances as values in a dictionary monsters_with_chance    
     for monster in entity_factories.monsters:
         monster: Actor
 
-        monster_difficulty = monster.fighter.power + monster.fighter.defense
-        level_difficulty = (engine.game_world.current_floor + 1) * game_difficulty
-        if monster_difficulty > level_difficulty:
-            continue
-        elif monster_difficulty < ((level_difficulty / min_level_bias) - 2.5):
-            continue
+        SC = monster.spawn_curve
+        
+        if engine.game_world.current_floor < monster.spawn_curve.peak_floor:
+            chance = get_spawn_probability(SC.min_prob, SC.peak_prob, SC.start_floor, SC.peak_floor, SC.end_floor, engine.game_world.current_floor, True)
+        else:
+            chance = get_spawn_probability(SC.min_prob, SC.peak_prob, SC.start_floor, SC.peak_floor, SC.end_floor, engine.game_world.current_floor, False)
 
-        adjusted_chance = 1/monster_difficulty
-        # Adicionar ao dicionário final
-        monsters_with_chance[monster] = adjusted_chance
-        print(f"{monster.name}: chance ajustada = {adjusted_chance:.4f}")
+        if chance < 0: chance = 0
 
+        monsters_with_chance[monster] = chance
+        
+        print(f"{monster.name}: chance ajustada = {chance:.4f}")
+        
     for room in rooms:
         place_entities(room, dungeon, max_monsters_per_room, max_items_per_room, max_chests_per_room, entity_factories, monsters_with_chance)
 
@@ -251,3 +237,11 @@ def generate_dungeon(
         level_chest.items.append(chosen_item)
     
     return dungeon
+
+def get_spawn_probability(min: int, peak:int, startint_floor:int, peak_floor:int, ending_floor:int, current:int, rising: bool) -> float:
+    if rising:
+        probability = min + (peak-min) * (current - startint_floor) / (peak_floor - startint_floor)
+    else:
+        probability = peak - (peak-min) * (current - peak_floor) / (ending_floor - peak_floor)
+    
+    return probability

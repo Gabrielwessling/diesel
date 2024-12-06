@@ -3,6 +3,7 @@ from components.ai import HostileEnemy
 from components import consumable, equippable
 from components.equipment import Equipment
 from components.fighter import Fighter
+from components.spawn_curve import SpawnCurve
 from components.inventory import Inventory
 from entity import Actor, Item, Chest
 from components.skill_list import SkillList
@@ -26,6 +27,7 @@ class EntityFactories:
             ai_cls=HostileEnemy,
             equipment=Equipment(),
             fighter=Fighter(hp=30, base_defense=1, base_power=2),
+            spawn_curve=None,
             inventory=Inventory(capacity=26, max_weight=55),
             skill_list=SkillList(parent=gamemap, engine=engine),  # Actor itself is the parent for its own data
         )
@@ -86,8 +88,8 @@ class EntityFactories:
                 inventory=Inventory(capacity=enemy_data["inventory"]["capacity"], 
                                      max_weight=enemy_data["inventory"]["max_weight"]),
                 skill_list=SkillList(parent=gamemap, engine=engine),
-                min_floor=enemy_data["min_floor"],
-                max_floor=enemy_data["max_floor"],
+                spawn_curve=SpawnCurve(min_prob=enemy_data["min_prob"], peak_prob=enemy_data["peak_prob"], start_floor=enemy_data["start_floor"],
+                                       peak_floor=enemy_data["peak_floor"], end_floor=enemy_data["end_floor"])
             )
             self.monsters.append(monster)
         
