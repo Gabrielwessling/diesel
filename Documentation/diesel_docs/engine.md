@@ -88,7 +88,7 @@ The `engine.py` module is the core of the "DIESEL" game logic. It contains the `
     2. Displays the `message_log` at a fixed position (`x=17, y=31`).
     3. Renders the player's health bar using `render_functions.render_bar`.
     4. Shows the names of entities under the mouse cursor with `render_functions.render_names_at_mouse_location`.
-    5. Displays the current dungeon level with `render_functions.render_dungeon_level`.
+    5. Displays the current dungeon level with `render_functions.render_dungeon_level_indicator`.
 
 ---
 

@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from components.equippable import Equippable
     from components.equipment import Equipment
     from components.fighter import Fighter
+    from components.spawn_curve import SpawnCurve
     from components.inventory import Inventory
     from components.skill_list import SkillList
 
@@ -103,6 +104,7 @@ class Actor(Entity):
         ai_cls: Type[BaseAI],
         equipment: Equipment,
         fighter: Fighter,
+        spawn_curve: Optional[SpawnCurve] = None,
         inventory: Inventory,
         skill_list: SkillList,
         parent: Optional[GameMap] = None,
@@ -124,6 +126,11 @@ class Actor(Entity):
 
         self.fighter = fighter
         self.fighter.parent = self
+        
+        #Initialize Spawn Curve
+        if spawn_curve:
+            self.spawn_curve = spawn_curve
+            self.spawn_curve.parent = self
 
         self.equipment: Equipment = equipment
         self.equipment.parent = self
@@ -134,12 +141,11 @@ class Actor(Entity):
         self.skill_list = skill_list
         self.skill_list.parent = self
 
-        
-
     @property
     def is_alive(self) -> bool:
         """Retorna True enquanto esse ator pode realizar ações."""
         return bool(self.ai)
+
     @property
     def hasnt_won(self) -> bool:
         monsters = []

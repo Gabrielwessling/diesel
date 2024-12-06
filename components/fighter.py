@@ -111,3 +111,6 @@ class Fighter(BaseComponent):
 
         self.engine.message_log.add_message(death_message, death_message_color)
         
+    def __repr__(self) -> str:
+        return (f"Fighter(hp={self.hp}/{self.max_hp}, defense={self.defense}, power={self.power}, "
+                f"range={self.range}, dexterity={self.dexterity})")

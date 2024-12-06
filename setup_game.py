@@ -22,15 +22,15 @@ background_image = tcod.image.load("images/menu_background.png")[:, :, :3]
 
 def new_game() -> Engine:
     """Return a brand new game session as an Engine instance."""
-    map_width = 75
-    map_height = 31
+    map_width = 80
+    map_height = 40
 
     room_max_size = 10
     room_min_size = 6
     max_rooms = 30
 
-    max_monsters_per_room = 2
-    max_items_per_room = 2
+    max_monsters_per_room = 1
+    max_items_per_room = 3
 
     engine = Engine(player=None, entity_factories=EntityFactories(None, None))
     entity_factories = EntityFactories(engine=engine, gamemap=None)

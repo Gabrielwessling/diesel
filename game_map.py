@@ -16,7 +16,7 @@ class GameMap:
     def __init__(
         self, engine: Engine, width: int, height: int, entities: Iterable[Entity] = ()
     ):
-        print (f" - Initializing GameMap...")
+        print (f"\n - Initializing GameMap...")
         self.engine = engine
         self.width, self.height = width, height
         self.entities = set(entities)
@@ -35,18 +35,15 @@ class GameMap:
     @property
     def actors(self) -> Iterator[ENT.Actor]:
         """Iterate over this map's living actors."""
-        print (f" - Iterating over living ACTORS inside map...")
         yield from (entity for entity in self.entities if isinstance(entity, ENT.Actor) and entity.is_alive)
 
     @property
     def items(self) -> Iterator[ENT.Item]:
         """Iterate over items on this map."""
-        print (f" - Iterating over ITEMS inside map...")
         yield from (entity for entity in self.entities if isinstance(entity, ENT.Item))
 
     def get_blocking_entity_at_location(self, x: int, y: int) -> Optional[Entity]:
         """Get a blocking entity at a location."""
-        print (f" - Getting blocking ENTITY at location x:{x} y:{y}...")
         return next(
             (entity for entity in self.entities if entity.blocks_movement and entity.x == x and entity.y == y),
             None,
@@ -54,7 +51,6 @@ class GameMap:
 
     def get_actor_at_location(self, x: int, y: int) -> Optional[Actor]:
         """Get an actor at a specific location."""
-        print (f" - Getting ACTOR at location x:{x} y:{y}...")
         return next((actor for actor in self.actors if actor.x == x and actor.y == y), None)
 
     def get_locations_of_tile(self, tile_type) -> list[tuple[int, int]]:
@@ -63,35 +59,59 @@ class GameMap:
         """
         print (f" - Getting list of all locations in the map that have {tile_type} tiles...")
         LIST = [tuple(loc) for loc in np.argwhere(self.tiles == tile_type)]
-        for i in range(len(LIST)):
-            print (f" - x:{LIST[i][0]} y:{LIST[i][1]} ...")
         return LIST
 
     def in_bounds(self, x: int, y: int) -> bool:
         """Return True if x and y are inside of the bounds of this map."""
         return 0 <= x < self.width and 0 <= y < self.height
 
-    def render(self, console: Console) -> None:
+    def render(self, console: Console, offset_x: int = 0, offset_y: int = 0) -> None:
         """
-        Renders the map.
-
-        If a tile is in the "visible" array, then draw it with the "light" colors.
-        If it isn't, but it's in the "explored" array, then draw it with the "dark" colors.
-        Otherwise, the default is "SHROUD".
+        Renderiza o mapa, preenchendo áreas fora das tiles com SHROUD.
         """
-        console.rgb[0 : self.width, 0 : self.height] = np.select(
-            condlist=[self.visible, self.explored],
-            choicelist=[self.tiles["light"], self.tiles["dark"]],
-            default=tile_types.SHROUD,
-        )
+        # Preenche todo o console com SHROUD antes de renderizar
+        console.rgb[:, :] = tile_types.SHROUD
 
-        entities_sorted_for_rendering = sorted(
-            (entity for entity in self.entities if self.visible[entity.x, entity.y]),
-            key=lambda x: x.render_order.value,
-        )
-        for entity in entities_sorted_for_rendering:
-            console.print(x=entity.x, y=entity.y, string=entity.char, fg=entity.color)
+        # Define os limites do console
+        console_width, console_height = console.width, console.height
 
+        # Itera sobre cada posição do console
+        for x in range(console_width):
+            for y in range(console_height):
+                # Calcula a posição no mapa correspondente ao console (ajustada pelo offset)
+                map_x = x + offset_x
+                map_y = y + offset_y
+
+                # Verifica se a posição está dentro dos limites do mapa
+                if 0 <= map_x < self.width and 0 <= map_y < self.height:
+                    if self.visible[map_x, map_y]:
+                        tile = self.tiles["light"][map_x, map_y]
+                    elif self.explored[map_x, map_y]:
+                        tile = self.tiles["dark"][map_x, map_y]
+                    else:
+                        tile = tile_types.SHROUD
+
+                    # Atualiza a posição do console com o tile correspondente
+                    console.rgb[x, y] = tile
+
+        # Ordena as entidades com base no render_order
+        sorted_entities = sorted(self.entities, key=lambda entity: entity.render_order.value)
+
+        # Renderiza as entidades ordenadas
+        for entity in sorted_entities:
+            # Verifica se a entidade está dentro dos limites do mapa e visível
+            if 0 <= entity.x < self.width and 0 <= entity.y < self.height and self.visible[entity.x, entity.y]:
+                draw_x = entity.x - offset_x
+                draw_y = entity.y - offset_y
+
+                # Renderiza apenas se a entidade estiver dentro do console
+                if 0 <= draw_x < console.width and 0 <= draw_y < console.height:
+                    console.print(
+                        x=draw_x,
+                        y=draw_y,
+                        string=entity.char,
+                        fg=entity.color,
+                    )
 
 class GameWorld:
     """
@@ -147,4 +167,5 @@ class GameWorld:
             max_items_per_room=self.max_items_per_room,
             max_chests_per_room=1,
             engine=self.engine,
+            current_floor=self.current_floor,  # Passar o andar atual
         )

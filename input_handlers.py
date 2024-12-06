@@ -144,7 +144,7 @@ class EventHandler(BaseEventHandler):
         if self.engine.game_map.in_bounds(event.tile.x, event.tile.y):
             self.engine.mouse_location = event.tile.x, event.tile.y
     
-    def on_render(self, console: tcod.Console) -> None:
+    def on_render(self, console: tcod.console.Console) -> None:
         self.engine.render(console)
 
 class PopupMessage(BaseEventHandler):
@@ -203,27 +203,17 @@ class AskUserEventHandler(EventHandler):
         return MainGameEventHandler(self.engine)
 
 class InventoryEventHandler(AskUserEventHandler):
-    """This handler lets the user select an item.
-
-    What happens then depends on the subclass.
-    """
+    """This handler lets the user select an item with the mouse or keyboard."""
 
     TITLE = "<missing title>"
 
     def __init__(self, engine: Engine):
         super().__init__(engine)
         self.grouped_items = self.group_inventory_items()
+        self.current_index = 0  # Index of the currently highlighted item
 
     def group_inventory_items(self) -> list[tuple[str, Item, int]]:
-        """
-        Group inventory items by name, preserving their order and count.
-
-        Returns:
-            A list of tuples (item_name, item, count), where:
-            - item_name: The display name of the item.
-            - item: A reference to one of the grouped items.
-            - count: The number of items in the group.
-        """
+        """Group inventory items by name, preserving their order and count."""
         grouped = {}
         for item in self.engine.player.inventory.items:
             key = f"[E] {item.name}" if self.engine.player.equipment.item_is_equipped(item) else item.name
@@ -231,38 +221,22 @@ class InventoryEventHandler(AskUserEventHandler):
                 grouped[key]["count"] += 1
             else:
                 grouped[key] = {"item": item, "count": 1}
-
-        # Convert grouped items to a list of tuples
         return [(name, data["item"], data["count"]) for name, data in grouped.items()]
 
     def on_render(self, console: tcod.Console) -> None:
-        """
-        Render an inventory menu, which displays the items in the inventory and their count.
-        Also shows the total weight and maximum weight capacity.
-        """
+        """Render the inventory menu."""
         super().on_render(console)
 
-        # Calculate display height
-        height = len(self.grouped_items) + 3  # 2 for header, 1 for at least one item line
-        if height <= 3:
-            height = 3
-
-        # Calculate inventory load
+        height = len(self.grouped_items) + 3
+        height = max(height, 3)
         inventory = self.engine.player.inventory
         total_weight = sum(item.weight for item in inventory.items)
         max_weight = inventory.max_weight
 
-        # Position based on player location
-        if self.engine.player.x <= 30:
-            x = 40
-        else:
-            x = 0
+        x = 40 if self.engine.player.x <= 30 else 0
         y = 0
-
-        # Calculate width dynamically
         width = max(len(self.TITLE), 30) + 4
 
-        # Draw the frame
         console.draw_frame(
             x=x,
             y=y,
@@ -273,52 +247,57 @@ class InventoryEventHandler(AskUserEventHandler):
             fg=(255, 255, 255),
             bg=(0, 0, 0),
         )
-        
-        # Print inventory load
+
         console.print(
             x + 1,
             y + 1,
             f"Load: {total_weight}/{max_weight}kg and {len(inventory.items)}/{inventory.capacity}",
         )
 
-        # Display items
         if self.grouped_items:
-            for i, (item_name, _, count) in enumerate(self.grouped_items, start=1):
-                item_key = chr(ord("1") + i - 1)
-                console.print(
-                    x + 1,
-                    y + i + 1,
-                    f"({item_key}) {item_name} x{count}",
-                )
+            for i, (item_name, _, count) in enumerate(self.grouped_items):
+                highlight = (i == self.current_index)
+                fg = (255, 255, 0) if highlight else (255, 255, 255)
+                console.print(x + 1, y + i + 2, f"{item_name} x{count}", fg=fg)
         else:
             console.print(x + 1, y + 2, "(Empty)")
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[ActionOrHandler]:
-        if event.sym in EXIT_KEYS:  # Handle Escape key
-            return MainGameEventHandler(self.engine)  # Return to the main game handler
-        
-        player = self.engine.player
+        """Handle keyboard input for navigation and selection."""
         key = event.sym
-        index = key - tcod.event.KeySym.N1
-        
-        if 0 <= index < len(self.grouped_items):
-            # Seleciona o item agrupado correto
-            _, selected_item, _ = self.grouped_items[index]
+
+        if key in {tcod.event.K_UP, tcod.event.K_w}:
+            self.current_index = (self.current_index - 1) % len(self.grouped_items)
+        elif key in {tcod.event.K_DOWN, tcod.event.K_s}:
+            self.current_index = (self.current_index + 1) % len(self.grouped_items)
+        elif key in {tcod.event.K_RETURN, tcod.event.K_KP_ENTER}:
+            _, selected_item, _ = self.grouped_items[self.current_index]
             return self.on_item_selected(selected_item)
-        else:
-            self.engine.message_log.add_message("Invalid Input.", color.invalid)
-            return None
+        elif key in EXIT_KEYS:
+            return MainGameEventHandler(self.engine)
+        return None
+
+    def ev_mousemotion(self, event: tcod.event.MouseMotion) -> None:
+        """Highlight items as the mouse hovers over them."""
+        x, y = event.tile
+        if x >= 1 and y >= 2 and y < len(self.grouped_items) + 2:
+            self.current_index = y - 2
+
+    def ev_mousebuttondown(self, event: tcod.event.MouseButtonDown) -> Optional[ActionOrHandler]:
+        """Select an item with a left mouse click."""
+        if event.button == 1:  # Left mouse button
+            if 0 <= self.current_index < len(self.grouped_items):
+                _, selected_item, _ = self.grouped_items[self.current_index]
+                return self.on_item_selected(selected_item)
+        if event.button == 2:  # Left mouse button
+            if 0 <= self.current_index < len(self.grouped_items):
+                _, selected_item, _ = self.grouped_items[self.current_index]
+                return actions.DropItem(self.engine.player, selected_item)
+        return None
 
     def on_item_selected(self, item: Item) -> Optional[ActionOrHandler]:
-        if item.consumable:
-            # Return the action for the selected item.
-            return item.consumable.get_action(self.engine.player)
-        elif item.equippable:
-            return actions.EquipAction(self.engine.player, item)
-        else:
-            return None
-
-
+        """Override this in subclasses for specific behavior."""
+        raise NotImplementedError()
 
 class InventoryActivateHandler(InventoryEventHandler):
     """Handle using an inventory item."""
@@ -353,11 +332,16 @@ class SelectIndexHandler(AskUserEventHandler):
         super().__init__(engine)
         player = self.engine.player
         engine.mouse_location = player.x, player.y
+        self.offset_x = 0
+        self.offset_y = 0
 
-    def on_render(self, console: tcod.Console) -> None:
+    def on_render(self, console: tcod.console.Console) -> None:
         """Highlight the tile under the cursor."""
         super().on_render(console)
+        
+        # Destaca o tile sob o cursor
         x, y = self.engine.mouse_location
+                
         console.tiles_rgb["bg"][x, y] = color.white
         console.tiles_rgb["fg"][x, y] = color.black
 
