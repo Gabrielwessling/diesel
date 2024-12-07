@@ -1,6 +1,10 @@
 from typing import Tuple
 
-import numpy as np  # type: ignore
+import tcod
+import numpy as np
+import tcod.tcod  # type: ignore
+
+base_codepoint = 0xE000
 
 # Tile graphics structured type compatible with Console.tiles_rgb.
 graphic_dt = np.dtype(
@@ -33,30 +37,30 @@ def new_tile(
     return np.array((walkable, transparent, dark, light), dtype=tile_dt)
 
 # SHROUD represents unexplored, unseen tiles
-SHROUD = np.array((ord(" "), (255, 255, 255), (30, 18, 18)), dtype=graphic_dt)
+SHROUD = np.array((0, (0, 0, 0), (0, 0, 0)), dtype=graphic_dt)
 
 floor_grass = new_tile(
     walkable=True,
     transparent=True,
-    dark=(ord(" "), (161, 70, 52), (125, 119, 119)),
-    light=(ord(" "), (181, 90, 72), (145, 139, 139)),
+    dark=(0, (220, 220, 220), (0, 0, 0)),
+    light=(0, (255, 255, 255), (0, 0, 0)),
 )
 floor_grass_alt = new_tile(
     walkable=True,
     transparent=True,
-    dark=(ord("w"), (102, 88, 88), (125, 119, 119)),
-    light=(ord("w"), (112, 98, 98), (145, 139, 139)),
+    dark=(353, (220, 220, 220), (0, 0, 0)),
+    light=(353, (255, 255, 255), (0, 0, 0)),
 )
 
 wall_stone = new_tile(
     walkable=False,
     transparent=False,
-    dark=(ord("#"), (70, 15, 8), (50, 16, 17)),
-    light=(ord("#"), (90, 35, 28), (70, 36, 37)),
+    dark=(301, (220, 220, 220), (0, 0, 0)),
+    light=(301, (255, 255, 255), (0, 0, 0)),
 )
 down_stairs = new_tile(
     walkable=True,
     transparent=True,
-    dark=(ord(">"), (0, 0, 0), (70, 15, 8)),
-    light=(ord(">"), (255, 255, 255), (90, 35, 28)),
+    dark=(304, (220, 220, 220), (0, 0, 0)),
+    light=(304, (255, 255, 255), (0, 0, 0)),
 )

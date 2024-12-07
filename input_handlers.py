@@ -13,7 +13,7 @@ from actions import (
     PickupAction,
     WaitAction
 )
-import color
+import categories.color as color
 import exceptions
 
 if TYPE_CHECKING:
@@ -603,7 +603,7 @@ class SkillsViewer(EventHandler):
         y_offset = 2
         for i, skill in enumerate(self.player.skill_list.skills):  # Itera pelas habilidades
             skill_line = (
-                f"{skill.name}: Level {skill.current_level} - {skill.experience_to_next_level} xp to next level"
+                f"{self.player.skill_list.skills[skill].name}: Level {self.player.skill_list.skills[skill].current_level} - {self.player.skill_list.skills[skill].remaining_xp} xp to next level"
             )
             skills_console.print(1, y_offset + i * 2, skill_line)
 

@@ -5,6 +5,8 @@ from typing import Optional
 from engine import Engine
 from entity import Actor
 
+import categories.color as color
+
 
 class Skill:
     def __init__(
@@ -31,21 +33,27 @@ class Skill:
     def experience_to_next_level(self) -> int:
         """Calculate XP required to reach the next level."""
         return self.level_up_base + self.current_level * self.level_up_factor
-
+    
+    @property
+    def remaining_xp(self) -> int:
+        return (self.level_up_base + self.current_level * self.level_up_factor) - self.current_xp
+    
     @property
     def requires_level_up(self) -> bool:
         """Check if current XP exceeds the required XP for the next level."""
         return self.current_xp >= self.experience_to_next_level
 
-    def add_xp(self, xp: int) -> None:
-        """Add experience points and level up if necessary."""
-        if xp == 0 or self.level_up_base == 0:
-            return
+    def add_xp(self, amount: int) -> None:
+        self.current_xp += amount
+        if self.current_xp >= self.experience_to_next_level:
+            self.level_up()
 
-        self.current_xp += xp
-
-        if self.requires_level_up:
-            self.increase_level()
+    def level_up(self) -> None:
+        self.current_level += 1
+        self.current_xp -= self.experience_to_next_level
+        self.engine.message_log.add_message(
+            f"{self.name} subiu para o nível {self.current_level}!", color.white
+        )
 
     def increase_level(self) -> None:
         """Increase the skill level and adjust XP."""

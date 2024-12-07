@@ -10,7 +10,7 @@ import lzma
 import pickle
 import traceback
 
-import color
+import categories.color as color
 from engine import Engine
 from entity_factories import EntityFactories
 from game_map import GameWorld

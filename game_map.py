@@ -5,7 +5,7 @@ import numpy as np  # type: ignore
 from tcod.console import Console
 import gc
 
-import tile_types
+import categories.tile_types as tile_types
 import entity as ENT
 
 if TYPE_CHECKING:

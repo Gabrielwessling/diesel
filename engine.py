@@ -58,8 +58,13 @@ class Engine:
             # Renderiza o mapa ajustando os offsets.
             self.game_map.render(console, offset_x, offset_y)
 
-        self.message_log.render(console=console, x=17, y=31, width=41, height=4)
-
+        self.message_log.render(
+            console=console,
+            x=17,
+            y=console.height - 7,  # Position 7 rows from the bottom
+            width=console.width - 34,
+            height=7,  # Display up to 7 lines of messages
+        )
         render_functions.render_bar(
             console=console,
             current_value=self.player.fighter.hp,

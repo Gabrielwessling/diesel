@@ -5,7 +5,7 @@ import math
 
 from typing import Optional, Tuple, Type, TypeVar, TYPE_CHECKING, Union, List
 
-from render_order import RenderOrder # imports de dentro
+from categories.render_order import RenderOrder # imports de dentro
 import exceptions
 from game_map import GameMap
 
@@ -34,7 +34,7 @@ class Entity:
         parent: Optional[GameMap] = None,
         x: int = 0,
         y: int = 0,
-        char: str = "?",
+        char: str = chr(639),
         color: Tuple[int, int, int] = (255, 255, 255),
         name: str = "<Unnamed>",
         blocks_movement: bool = False,
@@ -194,7 +194,7 @@ class Chest(Entity):
         *,
         x: int = 0,
         y: int = 0,
-        char: str = "C",  # Representação do baú no mapa.
+        char: str = chr(1069),  # Representação do baú no mapa.
         color: Tuple[int, int, int] = (139, 69, 19),  # Marrom, cor típica de baús.
         name: str = "Container",
         locked: bool = False,  # Indica se o baú está trancado.
@@ -234,7 +234,7 @@ class Chest(Entity):
         items = self.items
         self.items = []  # Esvazia o baú.
         self.blocks_movement = False  # O baú agora não bloqueia movimento.
-        self.char = "%"
+        self.char = chr(639)
         self.name = "Open Container"
         self.color = (100, 100, 40)
         self.blocks_movement = False
@@ -259,7 +259,7 @@ class Chest(Entity):
         items = self.items
         self.items = []  # Esvazia o baú.
         self.blocks_movement = False  # O baú agora não bloqueia movimento.
-        self.char = "%"
+        self.char = chr(426)
         self.name = "Broken Container"
         self.color = (100, 100, 40)
         self.blocks_movement = False
