@@ -114,9 +114,9 @@ def tunnel_between(
         yield x, y
 
 
-def modify_floor_tiles(dungeon: GameMap, new_dark: np.ndarray, new_light: np.ndarray) -> None:
+def modify_floor_tiles(dungeon: GameMap) -> None:
     """Modify all floor tiles of the dungeon with some chance of alternation."""
-    chance_of_alt_tile = 0.2  # Adjust probability as needed
+    chance_of_alt_tile = 0.008  # Adjust probability as needed
 
     # Create a random mask for the entire dungeon
     random_mask = np.random.rand(*dungeon.tiles.shape) < chance_of_alt_tile
@@ -124,12 +124,9 @@ def modify_floor_tiles(dungeon: GameMap, new_dark: np.ndarray, new_light: np.nda
     # Apply alternation only to tiles that are `floor_grass`
     floor_mask = dungeon.tiles == tile_types.floor_grass  # Identify all floor tiles
     alternation_mask = random_mask & floor_mask  # Combine the random mask with the floor mask
-
-    # Update the tiles in `dungeon.tiles` within the mask
-    # You will access the 'dark' and 'light' directly
-    dungeon.tiles[alternation_mask]['dark'] = np.array(new_dark, dtype=tile_types.graphic_dt)
-    dungeon.tiles[alternation_mask]['light'] = np.array(new_light, dtype=tile_types.graphic_dt)
-
+    tile = tile_types.floor_grass_alt
+    # Apply alternate tiles where the mask is True
+    dungeon.tiles[alternation_mask] = tile_types.floor_grass_alt
 
 def generate_dungeon(
     max_rooms: int,
@@ -170,16 +167,7 @@ def generate_dungeon(
         dungeon.tiles[new_room.inner] = tile_types.floor_grass
 
         for room in rooms:
-            # Select new `dark` and `light` values to use
-            new_dark = (374, (220, 220, 220), (0, 0, 0))  # Example new dark tile configuration
-            new_light = (374, (255, 255, 255), (0, 0, 0))  # Example new light tile configuration
-            modify_floor_tiles(dungeon, new_dark=new_dark, new_light=new_light)
-            
-        for room in rooms:
-            # Select new `dark` and `light` values to use
-            new_dark = (375, (220, 220, 220), (0, 0, 0))  # Example new dark tile configuration
-            new_light = (375, (255, 255, 255), (0, 0, 0))  # Example new light tile configuration
-            modify_floor_tiles(dungeon, new_dark=new_dark, new_light=new_light)
+            modify_floor_tiles(dungeon)
 
         center_of_last_room = new_room.center
 
