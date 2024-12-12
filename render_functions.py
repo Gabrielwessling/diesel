@@ -30,8 +30,8 @@ def render_names_at_mouse_location(
     mouse_x, mouse_y = engine.mouse_location
 
     # Calculate the size of each tile
-    tile_width = console.width // engine.game_map.width
-    tile_height = console.height // engine.game_map.height
+    tile_width = console.width // engine.game_map.width or 1
+    tile_height = console.height // engine.game_map.height or 1
 
     # Map mouse position to game map coordinates
     map_mouse_x = mouse_x // tile_width + (engine.player.x - console.width // 2)

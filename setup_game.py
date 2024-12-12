@@ -10,6 +10,7 @@ import lzma
 import pickle
 import traceback
 
+import config
 import categories.color as color
 from engine import Engine
 from entity_factories import EntityFactories
@@ -22,8 +23,8 @@ background_image = tcod.image.load("images/menu_background.png")[:, :, :3]
 
 def new_game() -> Engine:
     """Return a brand new game session as an Engine instance."""
-    map_width = 80
-    map_height = 40
+    map_width = config.WORLD_SIZE_X
+    map_height = config.WORLD_SIZE_Y
 
     room_max_size = 10
     room_min_size = 6

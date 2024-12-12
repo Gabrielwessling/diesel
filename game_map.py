@@ -143,7 +143,7 @@ class GameWorld:
 
     def generate_floor(self) -> None:
         """Generate a new floor, increasing the floor count."""
-        from procgen import generate_dungeon
+        from procgen import generate_overworld
 
         self.current_floor += 1
 
@@ -155,17 +155,13 @@ class GameWorld:
         gc.collect()
         for obj in gc.garbage:
             print(obj)
-            
+        
         # Gera o novo mapa.
-        self.engine.game_map = generate_dungeon(
-            max_rooms=self.max_rooms,
-            room_min_size=self.room_min_size,
-            room_max_size=self.room_max_size,
+        self.engine.game_map = generate_overworld(
+            
             map_width=self.map_width,
             map_height=self.map_height,
-            max_monsters_per_room=self.max_monsters_per_room,
-            max_items_per_room=self.max_items_per_room,
-            max_chests_per_room=1,
             engine=self.engine,
-            current_floor=self.current_floor,  # Passar o andar atual
+            seed=9329293,
+            noise_scale=1.0,
         )

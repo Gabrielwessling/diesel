@@ -42,14 +42,44 @@ SHROUD = np.array((0, (0, 0, 0), (0, 0, 0)), dtype=graphic_dt)
 floor_grass = new_tile(
     walkable=True,
     transparent=True,
-    dark=(0, (220, 220, 220), (0, 0, 0)),
-    light=(0, (255, 255, 255), (0, 0, 0)),
+    dark=(1202, (220, 220, 220), (0, 0, 0)),
+    light=(1202, (255, 255, 255), (0, 0, 0)),
 )
-floor_grass_alt = new_tile(
+floor_sand = new_tile(
     walkable=True,
     transparent=True,
-    dark=(353, (220, 220, 220), (0, 0, 0)),
-    light=(353, (255, 255, 255), (0, 0, 0)),
+    dark=(1201, (220, 220, 220), (0, 0, 0)),
+    light=(1201, (255, 255, 255), (0, 0, 0)),
+)
+floor_water = new_tile(
+    walkable=False,
+    transparent=True,
+    dark=(1200, (220, 220, 220), (0, 0, 0)),
+    light=(1200, (255, 255, 255), (0, 0, 0)),
+)
+floor_stone = new_tile(
+    walkable=True,
+    transparent=True,
+    dark=(1203, (220, 220, 220), (0, 0, 0)),
+    light=(1203, (255, 255, 255), (0, 0, 0)),
+)
+floor_snow = new_tile(
+    walkable=True,
+    transparent=True,
+    dark=(1204, (220, 220, 220), (0, 0, 0)),
+    light=(1204, (255, 255, 255), (0, 0, 0)),
+)
+floor_dirt = new_tile(
+    walkable=True,
+    transparent=True,
+    dark=(1205, (220, 220, 220), (0, 0, 0)),
+    light=(1205, (255, 255, 255), (0, 0, 0)),
+)
+floor_error = new_tile(
+    walkable=True,
+    transparent=True,
+    dark=(1135, (220, 220, 220), (200, 100, 0)),
+    light=(1135, (255, 255, 255), (200, 100, 0)),
 )
 
 wall_stone = new_tile(

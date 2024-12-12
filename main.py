@@ -18,17 +18,14 @@ def main() -> None:
     screen_width = 90
     screen_height = 50
 
-    tileset = tcod.tileset.load_tilesheet("tilesets/urizen12.png", 30, 40, tcod.tileset.CHARMAP)
+    tileset = tcod.tileset.load_tilesheet("tilesets/urizen12.png", 30, 52, tcod.tileset.CHARMAP)
     
     handler: input_handlers.BaseEventHandler = setup_game.MainMenu()
     
     with tcod.context.new(
-        width=90,
-        height=50,
         columns=90,
         rows=50,
         sdl_window_flags=tcod.context.SDL_WINDOW_FULLSCREEN_DESKTOP,
-        renderer=tcod.context.RENDERER_OPENGL2,
         tileset=tileset,
         title="DIESEL 0.0",
         vsync=True,
