@@ -75,6 +75,32 @@ floor_dirt = new_tile(
     dark=(1205, (220, 220, 220), (0, 0, 0)),
     light=(1205, (255, 255, 255), (0, 0, 0)),
 )
+floor_swamp = new_tile(
+    walkable=True,
+    transparent=True,
+    dark=(362, (220, 220, 220), (0, 0, 0)),
+    light=(362, (255, 255, 255), (0, 0, 0)),
+)
+floor_shrubland = new_tile(
+    walkable=True,
+    transparent=True,
+    dark=(575, (220, 220, 220), (0, 0, 0)),
+    light=(575, (255, 255, 255), (0, 0, 0)),
+)
+floor_marsh = new_tile(
+    walkable=True,
+    transparent=True,
+    dark=(377, (220, 220, 220), (0, 0, 0)),
+    light=(377, (255, 255, 255), (0, 0, 0)),
+)
+floor_savanna = new_tile(
+    walkable=True,
+    transparent=True,
+    dark=(742, (220, 220, 220), (0, 0, 0)),
+    light=(742, (255, 255, 255), (0, 0, 0)),
+)
+
+
 floor_error = new_tile(
     walkable=True,
     transparent=True,

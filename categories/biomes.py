@@ -20,5 +20,9 @@ biomes = [
     Biome("Grass", (0.4, 1), (0.4, 1), (0, 30), tile_types.floor_grass),
     Biome("Sand", (0.3, 0.7), (0, 0.3), (20, 50), tile_types.floor_sand),
     Biome("Dirt", (0.3, 0.4), (0.3, 0.4), (0, 50), tile_types.floor_dirt),
-    Biome("Snow", (0.3, 1), (0.6, 1), (-10, 10), tile_types.floor_snow)
+    Biome("Snow", (0.3, 1), (0.6, 1), (-10, 10), tile_types.floor_snow),
+    Biome("Swamp", (0.3, 0.6), (0.3, 0.6), (0.2, 0.5), tile_types.floor_swamp),
+    Biome("Shrubland", (0.4, 0.7), (0.3, 0.4), (0.3, 0.6), tile_types.floor_shrubland),
+    Biome("Marsh", (0.2, 0.4), (0.5, 0.7), (0.3, 0.5), tile_types.floor_marsh),
+    Biome("Savanna", (0.5, 0.7), (0.3, 0.5), (0.4, 0.7), tile_types.floor_savanna)
 ]
