@@ -169,8 +169,8 @@ procgen.py            # Procedural dungeon generation logic.
     ```python
     game_world = GameWorld(
         engine=engine,
-        map_width=80,
-        map_height=45,
+        map_width=config.WORLD_SIZE_X,
+        map_height=config.WORLD_SIZE_Y,
         max_rooms=30,
         room_min_size=6,
         room_max_size=10,

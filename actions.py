@@ -3,9 +3,10 @@ from __future__ import annotations
 import random
 from typing import Optional, Tuple, TYPE_CHECKING
 
-import color
+import categories.color as color
 import exceptions
 from entity import Chest
+from categories.skills import WEAPON_SKILL_MAP, EquipmentType
 
 if TYPE_CHECKING:
     from engine import Engine
@@ -168,9 +169,13 @@ class MeleeAction(ActionWithDirection):
 
         if damage > 0:
             if self.entity is self.engine.player:
-                self.engine.player.skill_list.skills[2].add_xp(15)
+                self.engine.player.skill_list.skills["Martial Arts"].add_xp(15)
             if target is self.engine.player:
-                self.engine.player.skill_list.skills[4].add_xp(15)
+                self.engine.player.skill_list.skills["Pain Mastering"].add_xp(15)
+            for skill_name, weapon_class in WEAPON_SKILL_MAP.items():
+                item_seguro: Item = self.engine.player.equipment.slots[EquipmentType.HANDS]
+                if item_seguro and item_seguro.equippable.equipment_type is weapon_class:
+                    self.engine.player.skill_list.skills[skill_name].add_xp(15)
             extra_damage_message = ""
             if dice == 1:
                 damage = damage*2
@@ -178,7 +183,6 @@ class MeleeAction(ActionWithDirection):
             self.engine.message_log.add_message(
                 f"{attack_desc} for {damage} damage.{extra_damage_message}", attack_color
             )
-            self.engine.player.skill_list.skills[2]
             target.fighter.hp -= damage
         else:
             self.engine.message_log.add_message(

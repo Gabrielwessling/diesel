@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 from components.base_component import BaseComponent
-from equipment_types import EquipmentType
-from damage_types import DamageType
-from armor_types import ArmorType
+from categories.equipment_types import EquipmentType
+from categories.damage_types import DamageType
+from categories.armor_types import ArmorType
 
 if TYPE_CHECKING:
     from entity import Item

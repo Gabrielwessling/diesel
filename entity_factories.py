@@ -21,8 +21,8 @@ class EntityFactories:
         
         # Initialize Player
         self.player = Actor(
-            char="@",
-            color=(50, 20, 20),
+            char=chr(500),
+            color=(255, 255, 255),
             name="Player",
             ai_cls=HostileEnemy,
             equipment=Equipment(),
@@ -34,8 +34,8 @@ class EntityFactories:
         
         # Initialize Key Items and add to the key_items list
         self.key = Item(
-            char="♦",
-            color=(100, 100, 100),
+            char=chr(868),
+            color=(255, 255, 255),
             name="Key",
             weight=0.01,
             key_id=0
@@ -44,8 +44,8 @@ class EntityFactories:
 
         # Initialize Chests and add to the chests list
         self.container = Chest(
-            char="C",
-            color=(45, 45, 15),
+            char=chr(1069),
+            color=(255, 255, 255),
             name="Container",
             locked=False,
             chest_id=0,
@@ -77,8 +77,8 @@ class EntityFactories:
         # Initialize Monsters and add to the monsters list
         for enemy_data in enemies_data:
             monster = Actor(
-                char=enemy_data["char"],
-                color=self.parse_color(enemy_data["color"]),
+                char=chr(int(enemy_data["char"])),
+                color=(255,255,255),
                 name=enemy_data["name"],
                 ai_cls=HostileEnemy,
                 equipment=Equipment(),
@@ -95,13 +95,13 @@ class EntityFactories:
         
     def parse_color(self, color_str: str) -> Tuple[int, int, int]:
         """Parse a color string like '255,0,0' into a tuple (255, 0, 0)."""
-        return tuple(map(int, color_str.split(",")))
+        return (255,255,255)
 
     def create_consumable(self, data) -> Item:
         """Create a consumable item from JSON data."""
         name = data["name"]
-        char = data["char"]
-        color = self.parse_color(data["color"])
+        char = chr(int(data["char"]))
+        color = (255,255,255)
         weight = float(data["weight"])
 
         # Dynamically get the consumable class
@@ -124,7 +124,7 @@ class EntityFactories:
     def create_equipable(self, data) -> Item:
         """Create an equipable item from JSON data."""
         name = data["name"]
-        char = data["char"]
+        char = chr(int(data["char"]))
         color = self.parse_color(data["color"])
         weight = float(data["weight"])
 

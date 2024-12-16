@@ -3,7 +3,7 @@ import traceback
 
 import tcod
 
-import color
+import categories.color as color
 import exceptions
 import input_handlers
 import setup_game
@@ -15,18 +15,17 @@ def save_game(handler: input_handlers.BaseEventHandler, filename: str) -> None:
         print("Game saved.")
 
 def main() -> None:
-    screen_width = 75
-    screen_height = 35
+    screen_width = 90
+    screen_height = 50
 
-    tileset = tcod.tileset.load_tilesheet(
-        "tilesets/frogblock.png", 16, 16, tcod.tileset.CHARMAP_CP437
-    )
-
+    tileset = tcod.tileset.load_tilesheet("tilesets/urizen12.png", 30, 52, tcod.tileset.CHARMAP)
+    
     handler: input_handlers.BaseEventHandler = setup_game.MainMenu()
     
-    with tcod.context.new_terminal(
-        190,
-        90,
+    with tcod.context.new(
+        columns=90,
+        rows=50,
+        sdl_window_flags=tcod.context.SDL_WINDOW_FULLSCREEN_DESKTOP,
         tileset=tileset,
         title="DIESEL 0.0",
         vsync=True,

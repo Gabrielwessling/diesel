@@ -3,7 +3,7 @@
       "consumables": [
         {
           "name": "Bottle of 51",
-          "char": "!",
+          "char": "995",
           "color": "255,0,100",
           "consumableClass": "HealingConsumable",
           "amount": 4,
@@ -11,7 +11,7 @@
         },
         {
           "name": "Broken Taser",
-          "char": "}",
+          "char": "1187",
           "color": "200,200,0",
           "consumableClass": "LightningDamageConsumable",
           "damage": 15,
@@ -20,7 +20,7 @@
         },
         {
           "name": "Crack Injection Launcher",
-          "char": "=",
+          "char": "1018",
           "color": "207,63,255",
           "consumableClass": "ConfusionConsumable",
           "number_of_turns": 10,
@@ -28,7 +28,7 @@
         },
         {
           "name": "Molotov",
-          "char": "~",
+          "char": "1024",
           "color": "255,0,0",
           "consumableClass": "FireballDamageConsumable",
           "damage": 12,
@@ -39,259 +39,259 @@
       "equipables": [
         {
           "name": "Dull Knife",
-          "char": "►",
+          "char": "708",
           "color": "70,70,70",
           "equippableClass": "Dagger",
           "weight": 0.15
         },
         {
           "name": "Garage-Crafted Sword",
-          "char": "►",
+          "char": "1032",
           "color": "215,200,150",
           "equippableClass": "Sword",
           "weight": 0.4
         },
         {
           "name": "Ex-Cop Baton",
-          "char": "♠",
+          "char": "1031",
           "color": "15,15,55",
           "equippableClass": "Hammer",
           "weight": 0.5
         },
         {
           "name": "Brit Spear",
-          "char": "|",
+          "char": "1012",
           "color": "255,50,200",
           "equippableClass": "Spear",
           "weight": 0.7
         },
         {
-          "name": "'Diassis' Axe",
-          "char": "|",
+          "name": "Crowbar",
+          "char": "1083",
           "color": "255,70,80",
           "equippableClass": "Axe",
           "weight": 0.4
         },
         {
           "name": "Rock",
-          "char": "o",
+          "char": "569",
           "color": "30,30,55",
           "equippableClass": "Throwable",
           "weight": 0.3
         },
         {
           "name": "Jus Bow",
-          "char": "/",
+          "char": "1076",
           "color": "0,200,100",
           "equippableClass": "Bow",
           "weight": 0.3
         },
         {
           "name": "Mugger-73 Pistol",
-          "char": "_",
+          "char": "997",
           "color": "150,50,150",
           "equippableClass": "Pistol",
           "weight": 0.4
         },
         {
           "name": "AK-37 Rifle",
-          "char": "_",
+          "char": "1005",
           "color": "92,53,5",
           "equippableClass": "Rifle",
           "weight": 0.7
         },
         {
           "name": "Rock Launcher",
-          "char": "_",
+          "char": "1009",
           "color": "5,47,82",
           "equippableClass": "Launcher",
           "weight": 1.0
         },
         {
           "name": "Linkin Park Shirt",
-          "char": "&",
+          "char": "646",
           "color": "26,82,21",
           "equippableClass": "Shirt",
           "weight": 0.3
         },
         {
           "name": "Leather Straps",
-          "char": "&",
+          "char": "664",
           "color": "41,27,20",
           "equippableClass": "Light_Body_Armor",
           "weight": 0.8
         },
         {
           "name": "Tin Can Armor",
-          "char": "&",
+          "char": "641",
           "color": "72,46,74",
           "equippableClass": "Medium_Body_Armor",
           "weight": 1.2
         },
         {
           "name": "Metal Sign Armor",
-          "char": "&",
+          "char": "1020",
           "color": "99,17,43",
           "equippableClass": "Heavy_Body_Armor",
           "weight": 6.8
         },
         {
           "name": "Arm-band",
-          "char": ")",
+          "char": "653",
           "color": "120,5,18",
           "equippableClass": "Arm_Band",
           "weight": 0.1
         },
         {
           "name": "Leather Arms Armor",
-          "char": ")",
+          "char": "653",
           "color": "87,56,15",
           "equippableClass": "Light_Arm_Armor",
           "weight": 0.2
         },
         {
           "name": "Tin Can Arms Armor",
-          "char": ")",
+          "char": "653",
           "color": "48,59,61",
           "equippableClass": "Medium_Arm_Armor",
           "weight": 0.4
         },
         {
           "name": "Heavy Metal Arms Armor",
-          "char": ")",
+          "char": "653",
           "color": "18,14,13",
           "equippableClass": "Heavy_Arm_Armor",
           "weight": 0.8
         },
         {
           "name": "Light Sabatons",
-          "char": "¨",
+          "char": "688",
           "color": "50,50,50",
           "equippableClass": "Light_Sabatons",
           "weight": 1.0
         },
         {
           "name": "Metal Tip Boot",
-          "char": "¨",
+          "char": "689",
           "color": "70,70,70",
           "equippableClass": "Medium_Sabatons",
           "weight": 1.5
         },
         {
           "name": "War Booties",
-          "char": "¨",
+          "char": "672",
           "color": "90,90,90",
           "equippableClass": "Heavy_Sabatons",
           "weight": 2.0
         },
         {
           "name": "Gloves",
-          "char": "*",
+          "char": "690",
           "color": "30,30,30",
           "equippableClass": "Gloves",
           "weight": 0.5
         },
         {
           "name": "Hand Hand-Made Armor",
-          "char": "*",
+          "char": "690",
           "color": "60,60,60",
           "equippableClass": "Light_Glove_Armor",
           "weight": 0.6
         },
         {
           "name": "Can Seal Chainmail Glove",
-          "char": "*",
+          "char": "691",
           "color": "90,90,90",
           "equippableClass": "Medium_Glove_Armor",
           "weight": 0.8
         },
         {
           "name": "Bruteforce Cyberglove 2000",
-          "char": "*",
+          "char": "691",
           "color": "120,120,120",
           "equippableClass": "Heavy_Glove_Armor",
           "weight": 1.0
         },
         {
           "name": "Old World Blue Jeans",
-          "char": "^",
+          "char": "670",
           "color": "40,40,40",
           "equippableClass": "Light_Leg_Armor",
           "weight": 1.2
         },
         {
           "name": "Two 1m Aluminum Tubes",
-          "char": "^",
+          "char": "670",
           "color": "80,80,80",
           "equippableClass": "Medium_Leg_Armor",
           "weight": 1.5
         },
         {
           "name": "Metallic Golden Leg Iron",
-          "char": "^",
+          "char": "670",
           "color": "120,120,120",
           "equippableClass": "Heavy_Leg_Armor",
           "weight": 2.0
         },
         {
           "name": "Default Cap",
-          "char": "<",
+          "char": "675",
           "color": "100,100,100",
           "equippableClass": "Light_Helmet",
           "weight": 0.8
         },
         {
           "name": "Medieval Football Helmet",
-          "char": "<",
+          "char": "676",
           "color": "150,150,150",
           "equippableClass": "Medium_Helmet",
           "weight": 1.2
         },
         {
           "name": "Solid Inox Fantasy Mage Hat",
-          "char": "<",
+          "char": "680",
           "color": "200,200,200",
           "equippableClass": "Heavy_Helmet",
           "weight": 1.5
         },
         {
           "name": "Confortable Shoulder Pads",
-          "char": "e",
+          "char": "175",
           "color": "80,80,80",
           "equippableClass": "Light_Shoulder_Pads",
           "weight": 0.6
         },
         {
           "name": "Hard Rock Shoulder Pads",
-          "char": "e",
+          "char": "175",
           "color": "120,120,120",
           "equippableClass": "Medium_Shoulder_Pads",
           "weight": 1.0
         },
         {
           "name": "Hungarian Fine Steel Shoulder Pads 4",
-          "char": "e",
+          "char": "175",
           "color": "160,160,160",
           "equippableClass": "Heavy_Shoulder_Pads",
           "weight": 1.5
         },
         {
         "name": "Ring",
-        "char": "+",
+        "char": "849",
         "color": "255,255,255",
         "equippableClass": "Ring",
         "weight": 0.1
         },
         {
         "name": "Necklace",
-        "char": "+",
+        "char": "854",
         "color": "255,200,200",
         "equippableClass": "Necklace",
         "weight": 0.2
         },
         {
         "name": "Tabard",
-        "char": "+",
+        "char": "657",
         "color": "100,100,255",
         "equippableClass": "Tabard",
         "weight": 0.4

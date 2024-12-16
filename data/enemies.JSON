@@ -1,7 +1,7 @@
 {
   "enemies": [
     {
-      "char": "D", 
+      "char": "915", 
       "color": "200,50,200", 
       "name": "Diesel Thief", 
       "ai_cls": "HostileEnemy", 
@@ -12,7 +12,7 @@
       "min_prob": 0, "peak_prob": 4, "start_floor": 0, "peak_floor": 1, "end_floor": 3
     },
     {
-      "char": "v", 
+      "char": "920", 
       "color": "127,63,63", 
       "name": "Vagabond", 
       "ai_cls": "HostileEnemy", 
@@ -23,7 +23,7 @@
       "min_prob": 0, "peak_prob": 6, "start_floor": 0, "peak_floor": 2, "end_floor": 3
     },
     {
-      "char": "w", 
+      "char": "297", 
       "color": "255,150,50", 
       "name": "Mutant Canibal", 
       "ai_cls": "HostileEnemy", 
@@ -34,7 +34,7 @@
       "min_prob": 0, "peak_prob": 5, "start_floor": 2, "peak_floor": 4, "end_floor": 5
     },
     {
-      "char": "p", 
+      "char": "964", 
       "color": "50,200,50", 
       "name": "Combat Pilot", 
       "ai_cls": "HostileEnemy", 
@@ -45,7 +45,7 @@
       "min_prob": 0, "peak_prob": 3, "start_floor": 2, "peak_floor": 5, "end_floor": 6
     },
     {
-      "char": "j", 
+      "char": "924", 
       "color": "100,100,255", 
       "name": "Jimmy Robber", 
       "ai_cls": "HostileEnemy", 
@@ -56,7 +56,7 @@
       "min_prob": 0, "peak_prob": 5, "start_floor": 3, "peak_floor": 6, "end_floor": 7
     },
     {
-      "char": "A", 
+      "char": "293", 
       "color": "200,50,50", 
       "name": "MotorMan Assalt 2", 
       "ai_cls": "HostileEnemy", 
@@ -67,7 +67,7 @@
       "min_prob": 0, "peak_prob": 5, "start_floor": 3, "peak_floor": 7, "end_floor": 8
     },
     {
-      "char": "B", 
+      "char": "954", 
       "color": "50,255,255", 
       "name": "Metal Band Member", 
       "ai_cls": "HostileEnemy", 
@@ -78,7 +78,7 @@
       "min_prob": 0, "peak_prob": 6, "start_floor": 3, "peak_floor": 6, "end_floor": 8
     },
     {
-      "char": "z", 
+      "char": "956", 
       "color": "255,255,0", 
       "name": "Rad Zed", 
       "ai_cls": "HostileEnemy", 
@@ -89,7 +89,7 @@
       "min_prob": 0, "peak_prob": 11, "start_floor": 4, "peak_floor": 6, "end_floor": 13
     },
     {
-      "char": "M", 
+      "char": "965", 
       "color": "255,100,100", 
       "name": "Mercenary", 
       "ai_cls": "HostileEnemy", 
@@ -100,7 +100,7 @@
       "min_prob": 0, "peak_prob": 8, "start_floor": 4, "peak_floor": 6, "end_floor": 10
     },
     {
-      "char": "d", 
+      "char": "298", 
       "color": "200,200,50", 
       "name": "Droner", 
       "ai_cls": "HostileEnemy", 
@@ -111,7 +111,7 @@
       "min_prob": 0, "peak_prob": 6, "start_floor": 4, "peak_floor": 7, "end_floor": 10
     },
     {
-      "char": "c", 
+      "char": "917", 
       "color": "50,50,200", 
       "name": "Untouchable Soldier", 
       "ai_cls": "HostileEnemy", 
@@ -122,7 +122,7 @@
       "min_prob": 0, "peak_prob": 3, "start_floor": 5, "peak_floor": 7, "end_floor": 10
     },
     {
-      "char": "s", 
+      "char": "966", 
       "color": "255,0,255", 
       "name": "Tech-Priest IKEA Manager", 
       "ai_cls": "HostileEnemy", 
@@ -133,7 +133,7 @@
       "min_prob": 0, "peak_prob": 5, "start_floor": 5, "peak_floor": 8, "end_floor": 10
     },
     {
-      "char": "h", 
+      "char": "295", 
       "color": "255,255,150", 
       "name": "Steel Hunter", 
       "ai_cls": "HostileEnemy", 
@@ -144,7 +144,7 @@
       "min_prob": 0, "peak_prob": 3, "start_floor": 6, "peak_floor": 9, "end_floor": 11
     },
     {
-      "char": "R", 
+      "char": "299", 
       "color": "180,180,50", 
       "name": "RobotCop", 
       "ai_cls": "HostileEnemy", 

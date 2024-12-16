@@ -1,247 +1,85 @@
 from __future__ import annotations
 
 import random
-import math
-from typing import Iterator, List, Tuple, TYPE_CHECKING, Dict
+from categories.biomes import biomes
+import config
+from typing import Dict, Tuple, TYPE_CHECKING
 
 import numpy as np
+from PIL import Image
+import threading
+import time
 import tcod
 
-from entity_factories import EntityFactories
-from game_map import GameMap
-import tile_types
-from entity import Chest, Item, Actor
-
+import categories.tile_types as tile_types
 
 if TYPE_CHECKING:
     from engine import Engine
 
-entity_factories: EntityFactories
-entity_factories: Engine.entity_factories
+def generate_perlin_grid(width: int, height: int, scale: float) -> np.ndarray:
+    """Generate a 2D Perlin noise grid."""
+    from perlin_noise import perlin_noise
+    seed=random.randint(1, 9999999)
+    perlin = perlin_noise.PerlinNoise(octaves=8, seed=seed)
+    grid = np.zeros((width, height))
+    for y in range(height):
+        for x in range(width):
+            grid[x, y] = perlin((x/scale, y/scale))
 
-class RectangularRoom:
-    def __init__(self, x: int, y: int, width: int, height: int, engine: Engine):
-        self.x1 = x
-        self.y1 = y
-        self.x2 = x + width
-        self.y2 = y + height
-        self.engine = engine
-
-    @property
-    def center(self) -> Tuple[int, int]:
-        center_x = int((self.x1 + self.x2) / 2)
-        center_y = int((self.y1 + self.y2) / 2)
-
-        return center_x, center_y
-
-    @property
-    def inner(self) -> Tuple[slice, slice]:
-        """Return the inner area of this room as a 2D array index."""
-        return slice(self.x1 + 1, self.x2), slice(self.y1 + 1, self.y2)
-
-    def intersects(self, other: RectangularRoom) -> bool:
-        """Return True if this room overlaps with another RectangularRoom."""
-        return (
-            self.x1 <= other.x2
-            and self.x2 >= other.x1
-            and self.y1 <= other.y2
-            and self.y2 >= other.y1
-        )
-
-def place_entities(
-    room: RectangularRoom, dungeon: GameMap, maximum_monsters: int, maximum_items: int, maximum_chests: int, entity_factories: EntityFactories, monsters_with_chance: Dict[Actor, float]
-) -> None:
-    number_of_monsters = random.randint(0, maximum_monsters)
-    number_of_items = random.randint(0, maximum_items)
-    number_of_chests = random.randint(0, maximum_chests)
-
-    monster_list = list(monsters_with_chance.keys())
-    weight_list = list(monsters_with_chance.values())
-    chosen_monsters = random.choices(monster_list, weights=weight_list, k=number_of_monsters)
-
-    # Debug: mostrar monstros escolhidos
-    print(f"Chosen monsters: {[monster.name for monster in chosen_monsters]}")
-
-    # Posicionar monstros no mapa
-    for entity in chosen_monsters:
-        x = random.randint(room.x1 + 1, room.x2 - 1)
-        y = random.randint(room.y1 + 1, room.y2 - 1)
-
-        if not any(existing_entity.x == x and existing_entity.y == y for existing_entity in dungeon.entities):
-            entity.parent = dungeon
-            entity.spawn(dungeon, x, y)
-
-    # Place items on the map
-    for i in range(number_of_items):
-        x = random.randint(room.x1 + 1, room.x2 - 1)
-        y = random.randint(room.y1 + 1, room.y2 - 1)
-
-        if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
-            dice = random.randint(0, len(entity_factories.items) - 1)
-            entity: Item = entity_factories.items[dice]
-            entity.parent = dungeon
-            entity.spawn(dungeon, x, y)
-
-    # Place chests on the map
-    for i in range(number_of_chests):
-        x = random.randint(room.x1 + 1, room.x2 - 1)
-        y = random.randint(room.y1 + 1, room.y2 - 1)
-
-        if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
-            dice = random.randint(0, 100)
-            if dice >= 90:
-                entity: Chest = entity_factories.chests[0]
-                entity.parent = dungeon
-                entity.spawn(dungeon, x, y)
-
-def tunnel_between(
-    start: Tuple[int, int], end: Tuple[int, int]
-) -> Iterator[Tuple[int, int]]:
-    """Return an L-shaped tunnel between these two points."""
-    x1, y1 = start
-    x2, y2 = end
-    if random.random() < 0.5:  # 50% chance.
-        # Move horizontally, then vertically.
-        corner_x, corner_y = x2, y1
+    # Avoid division by zero during normalization
+    grid_min, grid_max = np.min(grid), np.max(grid)
+    if grid_max != grid_min:
+        grid = (grid - grid_min) / (grid_max - grid_min)  # Normalize to [0, 1]
     else:
-        # Move vertically, then horizontally.
-        corner_x, corner_y = x1, y2
+        grid = np.zeros_like(grid)  # If all values are the same, return a grid of zeros
 
-    # Generate the coordinates for this tunnel.
-    for x, y in tcod.los.bresenham((x1, y1), (corner_x, corner_y)).tolist():
-        yield x, y
-    for x, y in tcod.los.bresenham((corner_x, corner_y), (x2, y2)).tolist():
-        yield x, y
+    return grid
 
 
-def modify_floor_tiles(dungeon: GameMap) -> None:
-    """Modify all floor tiles of the dungeon with some chance of alternation."""
-    chance_of_alt_tile = 0.02  # Adjust probability as needed
+def determine_biome(elevation: float, humidity: float, temperature: float):
+    """Determine the biome based on elevation, humidity, and temperature."""
+    for biome in biomes:
+        if biome.matches(elevation, humidity, temperature):
+            return biome.tile_type
+    # Default to grass if no biome matches
+    print (f"Error made with height:{elevation.__format__("0.00")} temp:{temperature.__format__("0.00")} humid:{humidity.__format__("0.00")}")
+    return tile_types.floor_error
 
-    # Create a random mask for the entire dungeon
-    random_mask = np.random.rand(*dungeon.tiles.shape) < chance_of_alt_tile
 
-    # Apply alternation only to tiles that are `floor_grass`
-    floor_mask = dungeon.tiles == tile_types.floor_grass  # Identify all floor tiles
-    alternation_mask = random_mask & floor_mask  # Combine the random mask with the floor mask
-
-    # Apply alternate tiles where the mask is True
-    dungeon.tiles[alternation_mask] = tile_types.floor_grass_alt
-
-def generate_dungeon(
-    max_rooms: int,
-    room_min_size: int,
-    room_max_size: int,
+def generate_overworld(
     map_width: int,
     map_height: int,
-    max_monsters_per_room: int,
-    max_items_per_room: int,
-    max_chests_per_room: int,
     engine: Engine,
-    current_floor: int,  # Adicionado
-) -> GameMap:
-    """Generate a new dungeon map."""
+    seed: int,
+    noise_scale: float = 100.0,
+) -> "GameMap":  # type: ignore
+    from game_map import GameMap  # Importação atrasada para evitar dependência circular
+
     player = engine.player
-    entity_factories = engine.entity_factories
-    dungeon = GameMap(engine, map_width, map_height, entities=[player])
+    overworld = GameMap(engine, map_width, map_height, entities=[player])
 
-    rooms: List[RectangularRoom] = []
+    # Gerar mapas de Perlin noise
+    heightmap = generate_perlin_grid(config.WORLD_SIZE_X, config.WORLD_SIZE_Y, 500.0)
+    humidity_map = generate_perlin_grid(config.WORLD_SIZE_X, config.WORLD_SIZE_Y, 500.0)
+    temperature_map = generate_perlin_grid(config.WORLD_SIZE_X, config.WORLD_SIZE_Y, 500.0)
 
-    center_of_last_room = (0, 0)
-    level_chest: Chest
-    level_chest = entity_factories.chests[0].spawn(dungeon, center_of_last_room[0] + 2, center_of_last_room[1] + 2)
+    def draw_loading_screen(console: tcod.console.Console, progress: int) -> None:
+        """Desenha a tela de carregamento com uma barra de progresso."""
+        console.clear()
+        console.print(x=1, y=1, string="Generating Overworld...", fg=(255, 255, 255))
+        bar_width = int((progress / 100) * (console.width - 2))
+        console.draw_rect(x=1, y=3, width=console.width - 2, height=1, ch=ord(" "), bg=(100, 100, 100))
+        console.draw_rect(x=1, y=3, width=bar_width, height=1, ch=ord(" "), bg=(0, 200, 50))
+        console.print(x=console.width // 2 - 5, y=5, string=f"{progress}%", fg=(255, 255, 255))
 
-    # Gerar as salas e conectar com túneis
-    for r in range(max_rooms):
-        room_width = random.randint(room_min_size, room_max_size)
-        room_height = random.randint(room_min_size, room_max_size)
+    for x in range(map_width):
+        for y in range(map_height):
+            biome = determine_biome(heightmap[x, y], humidity_map[x, y], temperature_map[x, y])
+            overworld.tiles[x, y] = biome
+            draw_loading_screen(tcod.console.Console, (x * map_height + y) / (map_width * map_height) * 100)
 
-        x = random.randint(0, dungeon.width - room_width - 1)
-        y = random.randint(0, dungeon.height - room_height - 1)
+    # Colocar o jogador no centro do mapa
+    player_x, player_y = map_width // 2, map_height // 2
+    player.place(player_x, player_y, overworld)
 
-        new_room = RectangularRoom(x, y, room_width, room_height, engine)
-
-        if any(new_room.intersects(other_room) for other_room in rooms):
-            continue  # Esta sala intersecta, então tente novamente
-
-        dungeon.tiles[new_room.inner] = tile_types.floor_grass
-
-        for room in rooms:
-            modify_floor_tiles(dungeon)
-
-        center_of_last_room = new_room.center
-
-        if len(rooms) == 0:
-            player.place(*new_room.center, dungeon)
-        else:
-            for x, y in tunnel_between(rooms[-1].center, new_room.center):
-                dungeon.tiles[x, y] = tile_types.floor_grass
-
-        rooms.append(new_room)
-
-    # Now that the dungeon is generated, we can generate the entities
-    monsters_with_chance: Dict[Actor, float] = {}  # Now using a dictionary
- 
-    # define monsters as keys and their chances as values in a dictionary monsters_with_chance    
-    for monster in entity_factories.monsters:
-        monster: Actor
-
-        SC = monster.spawn_curve
-        
-        if engine.game_world.current_floor < monster.spawn_curve.peak_floor:
-            chance = get_spawn_probability(SC.min_prob, SC.peak_prob, SC.start_floor, SC.peak_floor, SC.end_floor, engine.game_world.current_floor, True)
-        else:
-            chance = get_spawn_probability(SC.min_prob, SC.peak_prob, SC.start_floor, SC.peak_floor, SC.end_floor, engine.game_world.current_floor, False)
-
-        if chance < 0: chance = 0
-
-        monsters_with_chance[monster] = chance
-        
-        print(f"{monster.name}: chance ajustada = {chance:.4f}")
-        
-    for room in rooms:
-        place_entities(room, dungeon, max_monsters_per_room, max_items_per_room, max_chests_per_room, entity_factories, monsters_with_chance)
-
-    dungeon.tiles[center_of_last_room] = tile_types.down_stairs
-    dungeon.downstairs_location = center_of_last_room
-
-    level_chest.x = center_of_last_room[0] + 2
-    level_chest.y = center_of_last_room[1] + 2
-
-    dice_locked = random.randint(1, 100)
-
-    if dice_locked >= 80:
-        level_chest.breakable = False
-        level_chest.locked = True
-        level_chest.chest_id = random.randint(1, 100)
-        open_tiles = dungeon.get_locations_of_tile(tile_types.floor_grass)
-        if open_tiles:
-            chosen_location = random.choice(open_tiles)
-            key_chest: Item = entity_factories.key_items[0].spawn(
-                dungeon,
-                x=chosen_location[0],
-                y=chosen_location[1]
-            )
-            key_chest.key_id = level_chest.chest_id
-    else:
-        level_chest.locked = False
-        level_chest.breakable = True
-
-    if level_chest.locked: 
-        number_of_items = random.randint(3, 6) 
-    else:
-        number_of_items = random.randint(1, 5)
-
-    for _ in range(number_of_items):
-        chosen_item = random.choice(entity_factories.items)
-        level_chest.items.append(chosen_item)
-    
-    return dungeon
-
-def get_spawn_probability(min: int, peak:int, startint_floor:int, peak_floor:int, ending_floor:int, current:int, rising: bool) -> float:
-    if rising:
-        probability = min + (peak-min) * (current - startint_floor) / (peak_floor - startint_floor)
-    else:
-        probability = peak - (peak-min) * (current - peak_floor) / (ending_floor - peak_floor)
-    
-    return probability
+    return overworld

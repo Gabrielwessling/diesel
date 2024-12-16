@@ -4,7 +4,7 @@ from typing import Optional, TYPE_CHECKING
 
 import actions
 import components.ai
-import color
+import categories.color as color
 from components.base_component import BaseComponent
 import components.inventory
 from exceptions import Impossible

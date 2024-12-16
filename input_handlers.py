@@ -13,7 +13,7 @@ from actions import (
     PickupAction,
     WaitAction
 )
-import color
+import categories.color as color
 import exceptions
 
 if TYPE_CHECKING:
@@ -342,8 +342,8 @@ class SelectIndexHandler(AskUserEventHandler):
         # Destaca o tile sob o cursor
         x, y = self.engine.mouse_location
                 
-        console.tiles_rgb["bg"][x, y] = color.white
-        console.tiles_rgb["fg"][x, y] = color.black
+        console.rgb["bg"][x, y] = color.white
+        console.rgb["fg"][x, y] = color.black
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[ActionOrHandler]:
         """Check for key movement or confirmation keys."""
@@ -603,7 +603,7 @@ class SkillsViewer(EventHandler):
         y_offset = 2
         for i, skill in enumerate(self.player.skill_list.skills):  # Itera pelas habilidades
             skill_line = (
-                f"{skill.name}: Level {skill.current_level} - {skill.experience_to_next_level} xp to next level"
+                f"{self.player.skill_list.skills[skill].name}: Level {self.player.skill_list.skills[skill].current_level} - {self.player.skill_list.skills[skill].remaining_xp} xp to next level"
             )
             skills_console.print(1, y_offset + i * 2, skill_line)
 
